@@ -2,7 +2,9 @@ package com.zerobase.zbcharger.domain.member.service;
 
 import com.zerobase.zbcharger.domain.member.dao.MemberRepository;
 import com.zerobase.zbcharger.domain.member.dto.RegisterMemberRequest;
+import com.zerobase.zbcharger.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,8 @@ public class RegisterMemberService {
 
     private final MemberRepository memberRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     /**
      * 회원 가입
      */
@@ -24,8 +28,17 @@ public class RegisterMemberService {
             throw new RuntimeException("중복 이메일 존재");
         }
 
-        memberRepository.save(request.toEntity());
-
+        memberRepository.save(createMember(request));
+        
         // TODO: 인증 메일 전송
+    }
+
+    private Member createMember(RegisterMemberRequest request) {
+        return Member.builder()
+            .email(request.email())
+            .phone(request.phone())
+            .name(request.name())
+            .password(passwordEncoder.encode(request.password()))
+            .build();
     }
 }

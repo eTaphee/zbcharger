@@ -19,13 +19,4 @@ public record RegisterMemberRequest
      @Password String password,
      @MemberName String name,
      @Phone String phone) {
-
-    public Member toEntity() {
-        return Member.builder()
-            .email(email)
-            .password(password)
-            .name(name)
-            .phone(phone)
-            .build();
-    }
 }
