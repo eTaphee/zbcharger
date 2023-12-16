@@ -3,6 +3,8 @@ package com.zerobase.zbcharger.domain.member.service;
 import com.zerobase.zbcharger.domain.member.dao.MemberRepository;
 import com.zerobase.zbcharger.domain.member.dto.RegisterMemberRequest;
 import com.zerobase.zbcharger.domain.member.entity.Member;
+import com.zerobase.zbcharger.domain.member.event.MemberRegisteredEvent;
+import com.zerobase.zbcharger.event.Events;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,9 +30,9 @@ public class RegisterMemberService {
             throw new RuntimeException("중복 이메일 존재");
         }
 
-        memberRepository.save(createMember(request));
-        
-        // TODO: 인증 메일 전송
+        Member member = memberRepository.save(createMember(request));
+
+        Events.raise(new MemberRegisteredEvent(member.getId(), member.getEmail()));
     }
 
     private Member createMember(RegisterMemberRequest request) {

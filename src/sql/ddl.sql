@@ -25,3 +25,21 @@ ALTER TABLE `member`
 
 ALTER TABLE `member`
     MODIFY COLUMN `id` BIGINT AUTO_INCREMENT NOT NULL;
+
+CREATE TABLE `email_verification`
+(
+    `id`          uuid     NOT NULL,
+    `member_id`   bigint   NOT NULL COMMENT 'AI',
+    `expired_at`  datetime NOT NULL,
+    `verified_yn` tinyint(1) NOT NULL,
+    `created_at`  datetime NOT NULL,
+    `updated_at`  datetime NULL
+);
+
+ALTER TABLE `email_verification`
+    ADD CONSTRAINT `PK_EMAIL_VERIFICATION` PRIMARY KEY (`id`);
+
+ALTER TABLE `email_verification`
+    ADD CONSTRAINT `FK_member_TO_email_verification_1` FOREIGN KEY (`member_id`)
+        REFERENCES `member` (`id`)
+        ON DELETE CASCADE;
