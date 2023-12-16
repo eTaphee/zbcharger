@@ -2,6 +2,7 @@ package com.zerobase.zbcharger.domain.member.controller;
 
 import com.zerobase.zbcharger.domain.member.dto.RegisterMemberRequest;
 import com.zerobase.zbcharger.domain.member.service.RegisterMemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public class MemberController {
      * 회원 가입
      */
     @PostMapping("register")
-    public void registerMember(@RequestBody RegisterMemberRequest request) {
+    public void registerMember(@Valid @RequestBody RegisterMemberRequest request) {
         registerMemberService.registerMember(request);
     }
 }

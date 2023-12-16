@@ -1,8 +1,10 @@
 package com.zerobase.zbcharger.domain.member.dto;
 
 import com.zerobase.zbcharger.domain.member.entity.Member;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.zerobase.zbcharger.validator.annotation.Email;
+import com.zerobase.zbcharger.validator.annotation.MemberName;
+import com.zerobase.zbcharger.validator.annotation.Password;
+import com.zerobase.zbcharger.validator.annotation.Phone;
 
 /**
  * 회원 가입 요청
@@ -13,10 +15,10 @@ import lombok.RequiredArgsConstructor;
  * @param phone    연락처
  */
 public record RegisterMemberRequest
-    (String email,
-     String password,
-     String name,
-     String phone) {
+    (@Email String email,
+     @Password String password,
+     @MemberName String name,
+     @Phone String phone) {
 
     public Member toEntity() {
         return Member.builder()
