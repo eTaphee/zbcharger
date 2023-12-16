@@ -2,6 +2,7 @@ package com.zerobase.zbcharger.domain.member.entity;
 
 import com.zerobase.zbcharger.domain.common.entity.AuditableEntity;
 import com.zerobase.zbcharger.util.ValidationUtils;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,20 +46,21 @@ public class Member extends AuditableEntity {
     /**
      * 연락처
      */
-    private String tel;
+    private String phone;
 
     /**
      * 이메일 인증 일시
      */
+    @Column(insertable = false)
     private LocalDateTime emailVerifiedAt;
 
     @Builder
-    public Member(String email, String password, String name, String tel) {
-        validateMemberInitialize(email, password, name, tel);
+    public Member(String email, String password, String name, String phone) {
+        validateMemberInitialize(email, password, name, phone);
         this.email = email;
         this.password = password;
         this.name = name;
-        this.tel = tel;
+        this.phone = phone;
     }
 
     /**
@@ -67,12 +69,13 @@ public class Member extends AuditableEntity {
      * @param email    이메일
      * @param password 패스워드
      * @param name     이름
-     * @param tel      연락처
+     * @param phone    연락처
      */
-    private void validateMemberInitialize(String email, String password, String name, String tel) {
+    private void validateMemberInitialize(String email, String password, String name,
+        String phone) {
         ValidationUtils.StringMustBeNotBlank("email", email);
         ValidationUtils.StringMustBeNotBlank("password", password);
         ValidationUtils.StringMustBeNotBlank("name", name);
-        ValidationUtils.StringMustBeNotBlank("tel", tel);
+        ValidationUtils.StringMustBeNotBlank("phone", phone);
     }
 }

@@ -13,7 +13,7 @@ CREATE TABLE `member`
     `id`                BIGINT       NOT NULL,
     `password`          VARCHAR(60)  NOT NULL,
     `name`              VARCHAR(24)  NOT NULL,
-    `tel`               VARCHAR(24)  NOT NULL,
+    `phone`             VARCHAR(24)  NOT NULL,
     `email`             VARCHAR(480) NOT NULL,
     `email_verified_at` DATETIME,
     `created_at`        DATETIME     NOT NULL,
