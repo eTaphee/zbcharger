@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost/zbcharger?characterEncoding=utf8&serverTimezone=asia/seoul
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: zbuser
+    password: zbpass
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
