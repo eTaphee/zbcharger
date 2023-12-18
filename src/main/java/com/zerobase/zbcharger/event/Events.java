@@ -1,16 +1,16 @@
 package com.zerobase.zbcharger.event;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class Events {
 
-    private static ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher publisher;
 
-    public static void setPublisher(ApplicationEventPublisher publisher) {
-        Events.publisher = publisher;
-    }
-
-    public static void raise(Object event) {
+    public void raise(Object event) {
         if (publisher != null) {
             publisher.publishEvent(event);
         }
