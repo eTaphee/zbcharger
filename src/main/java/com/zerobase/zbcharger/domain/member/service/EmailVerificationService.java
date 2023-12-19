@@ -38,10 +38,6 @@ public class EmailVerificationService {
      */
     @Transactional
     public void sendVerificationEmail(Long memberId, String email) {
-        // TODO: 멘토님 @TransactionalEventListener AFTER_COMMIT 물어보기
-        // TODO: 이메일 인증을 회원 도메인에 포함시켜도 될지?
-        // TODO: 회원 생성 시, 이메일 인증 정보도 같이 생성
-
         EmailVerification emailVerification
             = emailVerificationRepository.save(new EmailVerification(memberId));
 

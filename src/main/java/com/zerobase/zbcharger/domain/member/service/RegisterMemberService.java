@@ -21,8 +21,6 @@ public class RegisterMemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final Events events;
-
     /**
      * 회원 가입
      */
@@ -34,7 +32,7 @@ public class RegisterMemberService {
 
         Member member = memberRepository.save(createMember(request));
 
-        events.raise(new MemberRegisteredEvent(member.getId(), member.getEmail()));
+        Events.raise(new MemberRegisteredEvent(member.getId(), member.getEmail()));
     }
 
     private Member createMember(RegisterMemberRequest request) {
