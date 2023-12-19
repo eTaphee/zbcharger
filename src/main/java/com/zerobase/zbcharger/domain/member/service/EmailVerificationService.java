@@ -1,7 +1,5 @@
 package com.zerobase.zbcharger.domain.member.service;
 
-import com.zerobase.zbcharger.domain.member.dao.EmailVerificationRepository;
-import com.zerobase.zbcharger.domain.member.entity.EmailVerification;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.util.UUID;
@@ -20,8 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class EmailVerificationService {
 
-    private final EmailVerificationRepository emailVerificationRepository;
-
     private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
@@ -33,26 +29,22 @@ public class EmailVerificationService {
     /**
      * 인증 이메일 전송
      *
-     * @param memberId 회원 아이디
-     * @param email    이메일
+     * @param id    인증 아이디
+     * @param email 이메일
      */
     @Transactional
-    public void sendVerificationEmail(Long memberId, String email) {
-        EmailVerification emailVerification
-            = emailVerificationRepository.save(new EmailVerification(memberId));
-
-        // 이메일 전송
-        mailSender.send(createVerificationMessage(emailVerification, email));
+    public void sendVerificationEmail(UUID id, String email) {
+        mailSender.send(createVerificationMessage(id, email));
     }
 
     /**
      * 인증 메시지 생성
      *
-     * @param emailVerification 인증정보
-     * @param email             이메일
+     * @param id    인증 아이디
+     * @param email 이메일
      * @return 인증 메시지
      */
-    private MimeMessage createVerificationMessage(EmailVerification emailVerification,
+    private MimeMessage createVerificationMessage(UUID id,
         String email) {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
@@ -61,7 +53,7 @@ public class EmailVerificationService {
             helper.setFrom(from);
             helper.setTo(email);
             helper.setSubject("[ZB Charger] 이메일 인증");
-            helper.setText(createVerificationUri(email, emailVerification.getId()));
+            helper.setText(createVerificationUri(id, email));
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
@@ -72,15 +64,15 @@ public class EmailVerificationService {
     /**
      * 인증 uri 생성
      *
+     * @param id    인증 아이디
      * @param email 이메일
-     * @param token 이메일 인증 pk
      * @return 인증 uri
      */
-    private String createVerificationUri(String email, UUID token) {
+    private String createVerificationUri(UUID id, String email) {
         return UriComponentsBuilder.fromHttpUrl(host)
             .path("/member/email/verify")
             .queryParam("email", email)
-            .queryParam("token", token)
+            .queryParam("token", id)
             .build()
             .toString();
     }

@@ -1,10 +1,10 @@
 package com.zerobase.zbcharger.domain.member.service;
 
+import com.zerobase.zbcharger.domain.member.dao.EmailVerificationRepository;
 import com.zerobase.zbcharger.domain.member.dao.MemberRepository;
 import com.zerobase.zbcharger.domain.member.dto.RegisterMemberRequest;
+import com.zerobase.zbcharger.domain.member.entity.EmailVerification;
 import com.zerobase.zbcharger.domain.member.entity.Member;
-import com.zerobase.zbcharger.domain.member.event.MemberRegisteredEvent;
-import com.zerobase.zbcharger.event.Events;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegisterMemberService {
 
     private final MemberRepository memberRepository;
+    private final EmailVerificationRepository emailVerificationRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -32,7 +33,10 @@ public class RegisterMemberService {
 
         Member member = memberRepository.save(createMember(request));
 
-        Events.raise(new MemberRegisteredEvent(member.getId(), member.getEmail()));
+        EmailVerification emailVerification = emailVerificationRepository.save(
+            new EmailVerification(member));
+
+        emailVerification.sendMail();
     }
 
     private Member createMember(RegisterMemberRequest request) {

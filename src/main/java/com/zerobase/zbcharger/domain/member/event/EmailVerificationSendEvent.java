@@ -1,20 +1,23 @@
 package com.zerobase.zbcharger.domain.member.event;
 
 import com.zerobase.zbcharger.event.Event;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
- * 회원가입 이벤트
+ * 인증 메일 전송 이벤트
  */
 @RequiredArgsConstructor
 @Getter
-public class MemberRegisteredEvent extends Event {
+@ToString
+public class EmailVerificationSendEvent extends Event {
 
     /**
-     * 회원 아이디
+     * 인증 아이디
      */
-    private final Long memberId;
+    private final UUID id;
 
     /**
      * 이메일
