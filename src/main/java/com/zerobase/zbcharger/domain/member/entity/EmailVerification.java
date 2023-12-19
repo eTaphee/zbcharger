@@ -50,6 +50,11 @@ public class EmailVerification extends AuditableEntity {
     private boolean verifiedYn;
 
     /**
+     * 인증 일시
+     */
+    private LocalDateTime verifiedAt;
+
+    /**
      * 메일 발송 횟수
      */
     private int sendCount;
@@ -92,7 +97,29 @@ public class EmailVerification extends AuditableEntity {
      */
     private void checkRetryTime() {
         if (lastSentAt != null && LocalDateTime.now().isAfter(lastSentAt.plusMinutes(RETRY_MIN))) {
+            // TODO: 커스텀 예외
             throw new RuntimeException("retry disable");
         }
+    }
+
+    /**
+     * 인증 시간 초과 확인
+     */
+    private void checkExpiredAt() {
+        if (expiredAt != null && LocalDateTime.now().isAfter(expiredAt)) {
+            // TODO: 커스텀 예외
+            throw new RuntimeException("expired");
+        }
+    }
+
+    /**
+     * 인증
+     */
+    public void verify() {
+        alreadyVerified();
+        checkExpiredAt();
+
+        verifiedYn = true;
+        verifiedAt = LocalDateTime.now();
     }
 }

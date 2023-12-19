@@ -1,5 +1,7 @@
 package com.zerobase.zbcharger.domain.member.service;
 
+import com.zerobase.zbcharger.domain.member.dao.EmailVerificationRepository;
+import com.zerobase.zbcharger.domain.member.entity.EmailVerification;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.util.UUID;
@@ -17,6 +19,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 @RequiredArgsConstructor
 public class EmailVerificationService {
+
+    private final EmailVerificationRepository emailVerificationRepository;
 
     private final JavaMailSender mailSender;
 
@@ -75,5 +79,21 @@ public class EmailVerificationService {
             .queryParam("token", id)
             .build()
             .toString();
+    }
+
+    /**
+     * 이메일 인증
+     *
+     * @param token 인증 아이디
+     * @param email 이메일
+     */
+    @Transactional
+    public void verifyEmail(UUID token, String email) {
+        // TODO: 커스텀 예외
+        EmailVerification emailVerification = emailVerificationRepository
+            .findByIdAndMemberEmail(token, email)
+            .orElseThrow(() -> new RuntimeException("not found"));
+
+        emailVerification.verify();
     }
 }
