@@ -1,5 +1,6 @@
 package com.zerobase.zbcharger.domain.member.service;
 
+import static com.zerobase.zbcharger.exception.constant.ErrorCode.EMAIL_VERIFICATION_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -8,6 +9,7 @@ import static org.mockito.BDDMockito.given;
 import com.zerobase.zbcharger.domain.member.dao.EmailVerificationRepository;
 import com.zerobase.zbcharger.domain.member.entity.EmailVerification;
 import com.zerobase.zbcharger.domain.member.entity.Member;
+import com.zerobase.zbcharger.exception.CustomException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,10 +49,10 @@ class EmailVerificationServiceTest {
             .willReturn(Optional.empty());
 
         // when
-        RuntimeException exception = assertThrows(RuntimeException.class,
+        CustomException exception = assertThrows(CustomException.class,
             () -> emailVerificationService.verifyEmail(any(), any()));
 
         // then
-        assertEquals("not found", exception.getMessage());
+        assertEquals(EMAIL_VERIFICATION_NOT_FOUND, exception.getErrorCode());
     }
 }
