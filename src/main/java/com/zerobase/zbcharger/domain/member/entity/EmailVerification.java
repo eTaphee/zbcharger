@@ -1,8 +1,13 @@
 package com.zerobase.zbcharger.domain.member.entity;
 
+import static com.zerobase.zbcharger.exception.constant.ErrorCode.ALREADY_EMAIL_VERIFIED;
+import static com.zerobase.zbcharger.exception.constant.ErrorCode.EMAIL_VERIFICATION_EXPIRED;
+import static com.zerobase.zbcharger.exception.constant.ErrorCode.EMAIL_VERIFICATION_RESEND_TIME_EXCEED;
+
 import com.zerobase.zbcharger.domain.common.entity.AuditableEntity;
 import com.zerobase.zbcharger.domain.member.event.EmailVerificationSendEvent;
 import com.zerobase.zbcharger.event.Events;
+import com.zerobase.zbcharger.exception.CustomException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -87,8 +92,7 @@ public class EmailVerification extends AuditableEntity {
      */
     private void alreadyVerified() {
         if (isVerifiedYn()) {
-            // TODO: 커스텀 예외
-            throw new RuntimeException("already verified");
+            throw new CustomException(ALREADY_EMAIL_VERIFIED);
         }
     }
 
@@ -97,8 +101,7 @@ public class EmailVerification extends AuditableEntity {
      */
     private void checkRetryTime() {
         if (lastSentAt != null && LocalDateTime.now().isAfter(lastSentAt.plusMinutes(RETRY_MIN))) {
-            // TODO: 커스텀 예외
-            throw new RuntimeException("retry disable");
+            throw new CustomException(EMAIL_VERIFICATION_RESEND_TIME_EXCEED);
         }
     }
 
@@ -107,8 +110,7 @@ public class EmailVerification extends AuditableEntity {
      */
     private void checkExpiredAt() {
         if (expiredAt != null && LocalDateTime.now().isAfter(expiredAt)) {
-            // TODO: 커스텀 예외
-            throw new RuntimeException("expired");
+            throw new CustomException(EMAIL_VERIFICATION_EXPIRED);
         }
     }
 
