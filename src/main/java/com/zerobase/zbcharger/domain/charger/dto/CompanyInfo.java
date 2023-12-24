@@ -34,29 +34,6 @@ public class CompanyInfo {
      */
     private final String operator;
 
-    @Override
-    public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof CompanyInfo other)) {
-            return false;
-        }
-        if (!other.canEqual(this)) {
-            return false;
-        }
-        return this.id.equals(other.id);
-    }
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof CompanyInfo;
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
-
     public Company toEntity(boolean isNew) {
         return Company.builder()
             .id(id)

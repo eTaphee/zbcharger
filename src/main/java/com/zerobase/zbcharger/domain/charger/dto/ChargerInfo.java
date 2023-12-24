@@ -251,27 +251,4 @@ public class ChargerInfo {
             .isNew(isNew)
             .build();
     }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof ChargerInfo other)) {
-            return false;
-        }
-        if (!other.canEqual(this)) {
-            return false;
-        }
-        return this.stationId.equals(other.stationId) && this.chargerId.equals(other.chargerId);
-    }
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof ChargerInfo;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(stationId, chargerId);
-    }
 }

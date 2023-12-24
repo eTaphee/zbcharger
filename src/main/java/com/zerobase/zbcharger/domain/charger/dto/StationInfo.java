@@ -114,27 +114,4 @@ public class StationInfo {
             .isNew(isNew)
             .build();
     }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof StationInfo other)) {
-            return false;
-        }
-        if (!other.canEqual(this)) {
-            return false;
-        }
-        return this.id.equals(other.id);
-    }
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof StationInfo;
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
 }
