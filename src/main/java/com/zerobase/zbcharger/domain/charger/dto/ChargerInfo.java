@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringBooleanDeserializer;
 import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringLocalDateTimeDeserializer;
+import com.zerobase.zbcharger.domain.charger.entity.Charger;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -200,4 +202,76 @@ public class ChargerInfo {
      */
     @JsonDeserialize(using = StringBooleanDeserializer.class)
     private boolean trafficYn;
+
+    public CompanyInfo getCompany() {
+        return CompanyInfo.builder()
+            .id(companyId)
+            .name(companyName)
+            .call(operatorCall)
+            .operator(operatorName)
+            .build();
+    }
+
+    public StationInfo getStation() {
+        return StationInfo.builder()
+            .id(stationId)
+            .companyId(companyId)
+            .name(stationName)
+            .address(address)
+            .useTime(useTime)
+            .areaCode(areaCode)
+            .areaDetailCode(areaDetailCode)
+            .stationKindCode(stationKindCode)
+            .stationKindDetailCode(stationKindDetailCode)
+            .parkingFreeYn(parkingFreeYn)
+            .note(note)
+            .limitYn(limitYn)
+            .limitDetail(limitDetail)
+            .trafficYn(trafficYn)
+            .latitude(latitude)
+            .longitude(longitude)
+            .build();
+    }
+
+    public Charger toEntity(boolean isNew) {
+        return Charger.builder()
+            .id(stationId + chargerId)
+            .stationId(stationId)
+            .chargerType(chargerType)
+            .location(location)
+            .stat(stat)
+            .output(output)
+            .method(method)
+            .statUpdatedAt(statUpdatedAt)
+            .lastChargeStartedAt(lastChargeStartedAt)
+            .lastChargeFinishedAt(lastChargeEndedAt)
+            .nowChargeStartedAt(nowChargeStartedAt)
+            .deletedYn(deletedYn)
+            .deleteDetail(deleteDetail)
+            .isNew(isNew)
+            .build();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof ChargerInfo other)) {
+            return false;
+        }
+        if (!other.canEqual(this)) {
+            return false;
+        }
+        return this.stationId.equals(other.stationId) && this.chargerId.equals(other.chargerId);
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof ChargerInfo;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stationId, chargerId);
+    }
 }
