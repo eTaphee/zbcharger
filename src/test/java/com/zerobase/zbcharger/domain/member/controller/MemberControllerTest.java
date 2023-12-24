@@ -1,6 +1,8 @@
 package com.zerobase.zbcharger.domain.member.controller;
 
+import static com.zerobase.zbcharger.exception.constant.ErrorCode.ARGUMENT_NOT_VALID;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.zerobase.zbcharger.domain.member.dto.RegisterMemberRequest;
@@ -73,7 +75,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("email"));
     }
 
     @Test
@@ -92,7 +97,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("email"));
     }
 
     @Test
@@ -111,7 +119,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -130,7 +141,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -149,7 +163,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -168,7 +185,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -187,7 +207,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -206,7 +229,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -225,7 +251,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("name"));
     }
 
     @Test
@@ -244,7 +273,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("name"));
     }
 
     @Test
@@ -263,7 +295,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("name"));
     }
 
     @Test
@@ -282,7 +317,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("name"));
     }
 
     @Test
@@ -301,7 +339,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("phone"));
     }
 
     @Test
@@ -320,7 +361,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("phone"));
     }
 
     @Test
@@ -354,7 +398,9 @@ class MemberControllerTest {
         ResultActions resultActions = MockMvcUtils.performGet(mockMvc, url);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()));
     }
 
     @Test
@@ -370,6 +416,8 @@ class MemberControllerTest {
         ResultActions resultActions = MockMvcUtils.performGet(mockMvc, url);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()));
     }
 }

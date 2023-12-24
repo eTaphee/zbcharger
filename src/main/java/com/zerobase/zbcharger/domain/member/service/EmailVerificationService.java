@@ -1,7 +1,10 @@
 package com.zerobase.zbcharger.domain.member.service;
 
+import static com.zerobase.zbcharger.exception.constant.ErrorCode.EMAIL_VERIFICATION_NOT_FOUND;
+
 import com.zerobase.zbcharger.domain.member.dao.EmailVerificationRepository;
 import com.zerobase.zbcharger.domain.member.entity.EmailVerification;
+import com.zerobase.zbcharger.exception.CustomException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.util.UUID;
@@ -89,10 +92,9 @@ public class EmailVerificationService {
      */
     @Transactional
     public void verifyEmail(UUID token, String email) {
-        // TODO: 커스텀 예외
         EmailVerification emailVerification = emailVerificationRepository
             .findByIdAndMemberEmail(token, email)
-            .orElseThrow(() -> new RuntimeException("not found"));
+            .orElseThrow(() -> new CustomException(EMAIL_VERIFICATION_NOT_FOUND));
 
         emailVerification.verify();
     }
