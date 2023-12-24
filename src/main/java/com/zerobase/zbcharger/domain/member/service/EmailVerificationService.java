@@ -33,30 +33,22 @@ public class EmailVerificationService {
     /**
      * 인증 이메일 전송
      *
-     * @param memberId 회원 아이디
-     * @param email    이메일
+     * @param id    인증 아이디
+     * @param email 이메일
      */
     @Transactional
-    public void sendVerificationEmail(Long memberId, String email) {
-        // TODO: 멘토님 @TransactionalEventListener AFTER_COMMIT 물어보기
-        // TODO: 이메일 인증을 회원 도메인에 포함시켜도 될지?
-        // TODO: 회원 생성 시, 이메일 인증 정보도 같이 생성
-
-        EmailVerification emailVerification
-            = emailVerificationRepository.save(new EmailVerification(memberId));
-
-        // 이메일 전송
-        mailSender.send(createVerificationMessage(emailVerification, email));
+    public void sendVerificationEmail(UUID id, String email) {
+        mailSender.send(createVerificationMessage(id, email));
     }
 
     /**
      * 인증 메시지 생성
      *
-     * @param emailVerification 인증정보
-     * @param email             이메일
+     * @param id    인증 아이디
+     * @param email 이메일
      * @return 인증 메시지
      */
-    private MimeMessage createVerificationMessage(EmailVerification emailVerification,
+    private MimeMessage createVerificationMessage(UUID id,
         String email) {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
@@ -65,7 +57,7 @@ public class EmailVerificationService {
             helper.setFrom(from);
             helper.setTo(email);
             helper.setSubject("[ZB Charger] 이메일 인증");
-            helper.setText(createVerificationUri(email, emailVerification.getId()));
+            helper.setText(createVerificationUri(id, email));
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
@@ -76,16 +68,32 @@ public class EmailVerificationService {
     /**
      * 인증 uri 생성
      *
+     * @param id    인증 아이디
      * @param email 이메일
-     * @param token 이메일 인증 pk
      * @return 인증 uri
      */
-    private String createVerificationUri(String email, UUID token) {
+    private String createVerificationUri(UUID id, String email) {
         return UriComponentsBuilder.fromHttpUrl(host)
             .path("/member/email/verify")
             .queryParam("email", email)
-            .queryParam("token", token)
+            .queryParam("token", id)
             .build()
             .toString();
+    }
+
+    /**
+     * 이메일 인증
+     *
+     * @param token 인증 아이디
+     * @param email 이메일
+     */
+    @Transactional
+    public void verifyEmail(UUID token, String email) {
+        // TODO: 커스텀 예외
+        EmailVerification emailVerification = emailVerificationRepository
+            .findByIdAndMemberEmail(token, email)
+            .orElseThrow(() -> new RuntimeException("not found"));
+
+        emailVerification.verify();
     }
 }
