@@ -63,13 +63,16 @@ public class StationOpenApiService {
     private List<ChargerInfo> getChargerInfos() {
         List<ChargerInfo> chargerInfos = new ArrayList<>();
         int pageNo = 1;
+        int totalCount = -1;
 
         do {
             try {
                 ChargerInfoResponse response = dataGoKrApi
                     .getChargerInformation(serviceKey, pageNo++, MAX_NUM_OF_ROWS);
 
-                if (response == null || response.getItems().isEmpty()) {
+                totalCount = (totalCount == -1) ? response.getTotalCount() : totalCount;
+
+                if (response.getItems().isEmpty()) {
                     break;
                 }
 
@@ -81,7 +84,7 @@ public class StationOpenApiService {
             } catch (Exception e) {
                 log.error("exception is occurred. {}, pageNo={}", e, pageNo - 1);
             }
-        } while (true);
+        } while (totalCount <= chargerInfos.size());
 
         log.info("total chargerInfo={}", chargerInfos.size());
 
