@@ -1,8 +1,9 @@
 package com.zerobase.zbcharger.domain.member.entity;
 
 import com.zerobase.zbcharger.domain.common.entity.AuditableEntity;
-import com.zerobase.zbcharger.util.ValidationUtils;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -46,11 +47,18 @@ public class Member extends AuditableEntity {
      */
     private String phone;
 
+    /**
+     * 역할
+     */
+    @Enumerated(EnumType.STRING)
+    private final Role role;
+
     @Builder
-    public Member(String email, String password, String name, String phone) {
+    public Member(String email, String password, String name, String phone, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
+        this.role = role;
     }
 }
