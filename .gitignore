@@ -170,3 +170,5 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,java,intellij
+src/main/resources/application-datagokr.yml
+src/main/resources/application-email.yaml

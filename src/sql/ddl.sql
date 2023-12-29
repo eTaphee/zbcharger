@@ -21,6 +21,7 @@ CREATE TABLE `member`
     `name`       VARCHAR(24)  NOT NULL,
     `phone`      VARCHAR(24)  NOT NULL,
     `email`      VARCHAR(480) NOT NULL,
+    role         enum ('ADMIN', 'USER') DEFAULT 'USER' NOT NULL,
     `created_at` DATETIME     NOT NULL,
     `updated_at` DATETIME NULL
 );
