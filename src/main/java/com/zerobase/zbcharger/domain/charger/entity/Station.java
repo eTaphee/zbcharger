@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Persistable;
 
@@ -109,7 +108,6 @@ public class Station extends AuditableEntity implements Persistable<String> {
     private final Double longitude;
 
     @Transient
-    @Setter
     private boolean isNew = true;
 
     @Override
@@ -120,5 +118,9 @@ public class Station extends AuditableEntity implements Persistable<String> {
     @Override
     public boolean isNew() {
         return isNew;
+    }
+
+    public void setIsNewForPersistable(boolean isNew) {
+        this.isNew = isNew;
     }
 }

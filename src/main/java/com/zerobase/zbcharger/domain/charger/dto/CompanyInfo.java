@@ -34,13 +34,12 @@ public class CompanyInfo {
      */
     private final String operator;
 
-    public Company toEntity(boolean isNew) {
+    public Company toEntity() {
         return Company.builder()
             .id(id)
             .name(name)
             .tel(call)
             .operator(operator)
-            .isNew(isNew)
             .build();
     }
 }

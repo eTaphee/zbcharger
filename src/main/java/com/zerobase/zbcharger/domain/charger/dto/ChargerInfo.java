@@ -6,7 +6,6 @@ import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringBooleanDeser
 import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringLocalDateTimeDeserializer;
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -233,7 +232,7 @@ public class ChargerInfo {
             .build();
     }
 
-    public Charger toEntity(boolean isNew) {
+    public Charger toEntity() {
         return Charger.builder()
             .id(stationId + chargerId)
             .stationId(stationId)
@@ -248,7 +247,6 @@ public class ChargerInfo {
             .nowChargeStartedAt(nowChargeStartedAt)
             .deletedYn(deletedYn)
             .deleteDetail(deleteDetail)
-            .isNew(isNew)
             .build();
     }
 }

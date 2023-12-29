@@ -99,9 +99,10 @@ public class StationOpenApiService {
             .keySet()
             .stream()
             .map(m -> {
-                String companyId = m.getId();
-                boolean isNew = !allIds.contains(companyId);
-                return m.toEntity(isNew);
+                Company company = m.toEntity();
+                boolean isNew = !allIds.contains(m.getId());
+                company.setIsNewForPersistable(isNew);
+                return company;
             })
             .toList();
 
@@ -118,9 +119,10 @@ public class StationOpenApiService {
             .keySet()
             .stream()
             .map(m -> {
-                String stationId = m.getId();
-                boolean isNew = !allIds.contains(stationId);
-                return m.toEntity(isNew);
+                Station station = m.toEntity();
+                boolean isNew = !allIds.contains(m.getId());
+                station.setIsNewForPersistable(isNew);
+                return station;
             })
             .toList();
 
@@ -134,9 +136,11 @@ public class StationOpenApiService {
 
         List<Charger> chargerList = chargerInfos.stream()
             .map(m -> {
+                Charger charger = m.toEntity();
                 String chargerId = m.getStationId() + m.getChargerId();
                 boolean isNew = !allIds.contains(chargerId);
-                return m.toEntity(isNew);
+                charger.setIsNewForPersistable(isNew);
+                return charger;
             })
             .toList();
 

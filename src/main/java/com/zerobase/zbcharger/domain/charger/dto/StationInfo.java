@@ -94,7 +94,7 @@ public class StationInfo {
      */
     private final Double longitude;
 
-    public Station toEntity(boolean isNew) {
+    public Station toEntity() {
         return Station.builder()
             .id(id)
             .companyId(companyId)
@@ -111,7 +111,6 @@ public class StationInfo {
             .trafficYn(trafficYn)
             .latitude(latitude)
             .longitude(longitude)
-            .isNew(isNew)
             .build();
     }
 }
