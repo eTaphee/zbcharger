@@ -34,12 +34,15 @@ ALTER TABLE `member`
 
 CREATE TABLE `email_verification`
 (
-    `id`          uuid     NOT NULL,
-    `member_id`   bigint   NOT NULL COMMENT 'AI',
-    `expired_at`  datetime NOT NULL,
-    `verified_yn` tinyint(1) NOT NULL,
-    `created_at`  datetime NOT NULL,
-    `updated_at`  datetime NULL
+    `id`           uuid     NOT NULL,
+    `member_id`    bigint   NOT NULL COMMENT 'AI',
+    `expired_at`   datetime NULL,
+    `verified_yn`  tinyint(1) NOT NULL,
+    `verified_at`  datetime NULL,
+    `last_sent_at` datetime NULL,
+    `send_count`   int      NOT NULL,
+    `created_at`   datetime NOT NULL,
+    `updated_at`   datetime NULL
 );
 
 ALTER TABLE `email_verification`

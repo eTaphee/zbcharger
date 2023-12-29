@@ -1,10 +1,15 @@
 package com.zerobase.zbcharger.domain.member.controller;
 
+import static com.zerobase.zbcharger.exception.constant.ErrorCode.ARGUMENT_NOT_VALID;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.zerobase.zbcharger.domain.member.dto.RegisterMemberRequest;
+import com.zerobase.zbcharger.domain.member.service.EmailVerificationService;
 import com.zerobase.zbcharger.domain.member.service.RegisterMemberService;
 import com.zerobase.zbcharger.util.MockMvcUtils;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +18,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @WebMvcTest(MemberController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class MemberControllerTest {
 
     private static final String REGISTER_URL = "/members/register";
+    private static final String VERIFY_URL = "/member/email/verify";
     private static final String MOCK_EMAIL = "member@zbcharger.com";
     private static final String MOCK_PASSWORD = "1q2w#E$R";
     private static final String MOCK_NAME = "이태희";
@@ -29,6 +36,9 @@ class MemberControllerTest {
 
     @MockBean
     private RegisterMemberService registerMemberService;
+
+    @MockBean
+    private EmailVerificationService emailVerificationService;
 
     @Test
     @DisplayName("회원가입 성공")
@@ -65,7 +75,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("email"));
     }
 
     @Test
@@ -84,7 +97,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("email"));
     }
 
     @Test
@@ -103,7 +119,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -122,7 +141,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -141,7 +163,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -160,7 +185,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -179,7 +207,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -198,7 +229,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("password"));
     }
 
     @Test
@@ -217,7 +251,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("name"));
     }
 
     @Test
@@ -236,7 +273,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("name"));
     }
 
     @Test
@@ -255,7 +295,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("name"));
     }
 
     @Test
@@ -274,7 +317,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("name"));
     }
 
     @Test
@@ -293,7 +339,10 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("phone"));
     }
 
     @Test
@@ -312,6 +361,63 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
+            .andExpect(jsonPath("$.errors[0].field").value("phone"));
+    }
+
+    @Test
+    @DisplayName("메일 인증 성공")
+    void successVerifyEmail() throws Exception {
+        // given
+        // when
+        UUID token = UUID.randomUUID();
+
+        String url = UriComponentsBuilder.fromPath(VERIFY_URL)
+            .queryParam("email", MOCK_EMAIL)
+            .queryParam("token", token)
+            .toUriString();
+
+        ResultActions resultActions = MockMvcUtils.performGet(mockMvc, url);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        verify(emailVerificationService).verifyEmail(token, MOCK_EMAIL);
+    }
+
+    @Test
+    @DisplayName("메일 인증 실패 - 이메일 쿼리 없음")
+    void failVerifyEmail_query_email_null() throws Exception {
+        // given
+        // when
+        String url = UriComponentsBuilder.fromPath(VERIFY_URL)
+            .queryParam("token", UUID.randomUUID())
+            .toUriString();
+
+        ResultActions resultActions = MockMvcUtils.performGet(mockMvc, url);
+
+        // then
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()));
+    }
+
+    @Test
+    @DisplayName("메일 인증 실패 - 이메일 유효성")
+    void failVerifyEmail_query_email_invalid() throws Exception {
+        // given
+        // when
+        String url = UriComponentsBuilder.fromPath(VERIFY_URL)
+            .queryParam("token", UUID.randomUUID())
+            .queryParam("email", "invalid-email")
+            .toUriString();
+
+        ResultActions resultActions = MockMvcUtils.performGet(mockMvc, url);
+
+        // then
+        resultActions.andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()));
     }
 }
