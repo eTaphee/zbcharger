@@ -5,23 +5,34 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.zerobase.zbcharger.configuration.security.WebSecurityConfiguration;
+import com.zerobase.zbcharger.configuration.security.filter.JwtAuthenticationFilter;
 import com.zerobase.zbcharger.domain.member.dto.RegisterMemberRequest;
 import com.zerobase.zbcharger.domain.member.service.EmailVerificationService;
 import com.zerobase.zbcharger.domain.member.service.RegisterMemberService;
 import com.zerobase.zbcharger.util.MockMvcUtils;
+import com.zerobase.zbcharger.util.ResultActionsUtils;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@WebMvcTest(MemberController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@WebMvcTest(value = MemberController.class,
+    excludeAutoConfiguration = {SecurityAutoConfiguration.class},
+    excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
+            WebSecurityConfiguration.class,
+            JwtAuthenticationFilter.class
+        })
+    })
 class MemberControllerTest {
 
     private static final String REGISTER_URL = "/members/register";
@@ -75,10 +86,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("email"));
+        ResultActionsUtils.expectArgumentNotValidForEmail(resultActions);
     }
 
     @Test
@@ -97,10 +105,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("email"));
+        ResultActionsUtils.expectArgumentNotValidForEmail(resultActions);
     }
 
     @Test
@@ -119,10 +124,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("password"));
+        ResultActionsUtils.expectArgumentNotValidForPassword(resultActions);
     }
 
     @Test
@@ -141,10 +143,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("password"));
+        ResultActionsUtils.expectArgumentNotValidForPassword(resultActions);
     }
 
     @Test
@@ -163,10 +162,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("password"));
+        ResultActionsUtils.expectArgumentNotValidForPassword(resultActions);
     }
 
     @Test
@@ -185,10 +181,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("password"));
+        ResultActionsUtils.expectArgumentNotValidForPassword(resultActions);
     }
 
     @Test
@@ -207,10 +200,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("password"));
+        ResultActionsUtils.expectArgumentNotValidForPassword(resultActions);
     }
 
     @Test
@@ -229,10 +219,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("password"));
+        ResultActionsUtils.expectArgumentNotValidForPassword(resultActions);
     }
 
     @Test
@@ -251,10 +238,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("name"));
+        ResultActionsUtils.expectArgumentNotValidForMemberName(resultActions);
     }
 
     @Test
@@ -273,10 +257,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("name"));
+        ResultActionsUtils.expectArgumentNotValidForMemberName(resultActions);
     }
 
     @Test
@@ -295,10 +276,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("name"));
+        ResultActionsUtils.expectArgumentNotValidForMemberName(resultActions);
     }
 
     @Test
@@ -317,10 +295,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("name"));
+        ResultActionsUtils.expectArgumentNotValidForMemberName(resultActions);
     }
 
     @Test
@@ -339,10 +314,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("phone"));
+        ResultActionsUtils.expectArgumentNotValidForPhone(resultActions);
     }
 
     @Test
@@ -361,10 +333,7 @@ class MemberControllerTest {
             request);
 
         // then
-        resultActions.andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.code").value(ARGUMENT_NOT_VALID.toString()))
-            .andExpect(jsonPath("$.errors[0].field").value("phone"));
+        ResultActionsUtils.expectArgumentNotValidForPhone(resultActions);
     }
 
     @Test
