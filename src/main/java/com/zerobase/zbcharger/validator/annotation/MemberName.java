@@ -2,14 +2,14 @@ package com.zerobase.zbcharger.validator.annotation;
 
 import com.zerobase.zbcharger.validator.constant.ValidationMessage;
 import jakarta.validation.Constraint;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@NotBlank(message = ValidationMessage.INVALID_MEMBER_NAME_FORMAT)
+@NotNull(message = ValidationMessage.INVALID_MEMBER_NAME_FORMAT)
 @Size(min = 3, max = 10, message = ValidationMessage.INVALID_MEMBER_NAME_FORMAT)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
