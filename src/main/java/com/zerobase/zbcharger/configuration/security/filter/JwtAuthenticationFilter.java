@@ -16,16 +16,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 /**
  * JWT 인증 필터
  */
-@Component
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final String TOKEN_HEADER = "Authorization";
