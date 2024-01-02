@@ -6,11 +6,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.zerobase.zbcharger.configuration.security.WebSecurityConfiguration;
 import com.zerobase.zbcharger.configuration.security.filter.JwtAuthenticationFilter;
-import com.zerobase.zbcharger.configuration.security.jwt.JwtTokenProvider;
 import com.zerobase.zbcharger.domain.auth.dto.AuthenticationDto;
 import com.zerobase.zbcharger.domain.auth.dto.GenerateTokenRequest;
 import com.zerobase.zbcharger.domain.auth.dto.TokenDto;
 import com.zerobase.zbcharger.domain.auth.service.AuthService;
+import com.zerobase.zbcharger.domain.auth.service.TokenService;
 import com.zerobase.zbcharger.domain.member.entity.Role;
 import com.zerobase.zbcharger.util.MockMvcUtils;
 import com.zerobase.zbcharger.util.ResultActionsUtils;
@@ -38,7 +38,8 @@ class AuthControllerTest {
     private static final String TOKEN_URL = "/auth/token";
     private static final String MOCK_EMAIL = "member@zbcharger.com";
     private static final String MOCK_PASSWORD = "1q2w#E$R";
-    private static final String MOCK_TOKEN = "token";
+    private static final String MOCK_ACCESS_TOKEN = "accessToken";
+    private static final String MOCK_REFRESH_TOKEN = "refreshToken";
 
     @Autowired
     private MockMvc mockMvc;
@@ -47,7 +48,7 @@ class AuthControllerTest {
     private AuthService authService;
 
     @MockBean
-    private JwtTokenProvider tokenProvider;
+    private TokenService tokenService;
 
     @Test
     @DisplayName("토큰 발급 성공")
@@ -55,12 +56,12 @@ class AuthControllerTest {
         // given
         GenerateTokenRequest request = new GenerateTokenRequest(MOCK_EMAIL, MOCK_PASSWORD);
         AuthenticationDto authentication = new AuthenticationDto(MOCK_EMAIL, Role.USER);
-        TokenDto token = new TokenDto("token");
+        TokenDto token = new TokenDto(MOCK_ACCESS_TOKEN, MOCK_REFRESH_TOKEN);
 
         given(authService.authenticate(request))
             .willReturn(authentication);
 
-        given(tokenProvider.generateToken(authentication))
+        given(tokenService.generateToken(authentication))
             .willReturn(token);
 
         // when
@@ -70,7 +71,8 @@ class AuthControllerTest {
 
         // then
         resultActions.andExpect(status().isOk())
-            .andExpect(jsonPath("$.accessToken").value(MOCK_TOKEN));
+            .andExpect(jsonPath("$.accessToken").value(MOCK_ACCESS_TOKEN))
+            .andExpect(jsonPath("$.refreshToken").value(MOCK_REFRESH_TOKEN));
     }
 
     @Test
