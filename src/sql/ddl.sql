@@ -16,14 +16,14 @@ zbcharger;
 
 CREATE TABLE `member`
 (
-    `id`                BIGINT       NOT NULL,
-    `password`          VARCHAR(60)  NOT NULL,
-    `name`              VARCHAR(24)  NOT NULL,
-    `phone`             VARCHAR(24)  NOT NULL,
-    `email`             VARCHAR(480) NOT NULL,
-    `email_verified_at` DATETIME,
-    `created_at`        DATETIME     NOT NULL,
-    `updated_at`        DATETIME NULL
+    `id`         BIGINT       NOT NULL,
+    `password`   VARCHAR(60)  NOT NULL,
+    `name`       VARCHAR(24)  NOT NULL,
+    `phone`      VARCHAR(24)  NOT NULL,
+    `email`      VARCHAR(480) NOT NULL,
+    role         enum ('ADMIN', 'USER') DEFAULT 'USER' NOT NULL,
+    `created_at` DATETIME     NOT NULL,
+    `updated_at` DATETIME NULL
 );
 
 ALTER TABLE `member`

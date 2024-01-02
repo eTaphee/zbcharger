@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,12 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
+    USER_NOT_VERIFIED(UNAUTHORIZED, "인증된 사용자가 아닙니다."),
+    USER_NOT_FOUND(UNAUTHORIZED, "사용자를 찾을 수 없습니다."),
+    AUTHENTICATION_INVALID(UNAUTHORIZED, "아이디를 찾을 수 없거나, 비밀번호가 일치하지 않습니다."),
+    TOKEN_INVALID(UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    TOKEN_EXPIRED(UNAUTHORIZED, "토큰이 만료됐습니다."),
+
     EMAIL_ALREADY_EXISTS(CONFLICT, "중복되는 메일이 존재합니다."),
 
     EMAIL_VERIFICATION_NOT_FOUND(NOT_FOUND, "이메일 인증 정보를 찾을 수 없습니다."),

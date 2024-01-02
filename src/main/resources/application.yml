@@ -1,4 +1,12 @@
+logging.level:
+  org.hibernate.stat: debug
+#  org.hibernate.SQL: debug
+#  org.hibernate.orm.jdbc.bind: trace
+
 spring:
+  profiles:
+    include: email, datagokr
+
   datasource:
     url: jdbc:mariadb://localhost/zbcharger?characterEncoding=utf8&serverTimezone=asia/seoul
     driver-class-name: org.mariadb.jdbc.Driver
@@ -8,4 +16,18 @@ spring:
     database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+        # batch 정렬 옵션
+        order_inserts: true
+        order_updates: true
+        # 배치 개수 옵션
+        jdbc:
+          batch_size: 1000
+  #        generate_statistics: true
+  jwt:
+    secretKey: emItc3ByaW5nLWJvb3QtemJjaGFyZ2VyLXByb2plY3Qtand0LXNlY3JldC1rZXk=
+
+api.uri: http://localhost:8080

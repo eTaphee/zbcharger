@@ -1,5 +1,6 @@
 package com.zerobase.zbcharger.domain.member.service;
 
+import static com.zerobase.zbcharger.domain.member.entity.Role.USER;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.EMAIL_ALREADY_EXISTS;
 
 import com.zerobase.zbcharger.domain.member.dao.EmailVerificationRepository;
@@ -48,6 +49,7 @@ public class RegisterMemberService {
             .phone(request.phone())
             .name(request.name())
             .password(passwordEncoder.encode(request.password()))
+            .role(USER)
             .build();
     }
 }

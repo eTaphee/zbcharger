@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface EmailVerificationRepository extends JpaRepository<EmailVerification, UUID> {
 
     Optional<EmailVerification> findByIdAndMemberEmail(UUID id, String email);
+
+    Optional<EmailVerification> findByMemberEmail(String email);
 }
