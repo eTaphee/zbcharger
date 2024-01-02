@@ -1,10 +1,10 @@
 package com.zerobase.zbcharger.domain.auth.controller;
 
-import com.zerobase.zbcharger.configuration.security.jwt.JwtTokenProvider;
 import com.zerobase.zbcharger.domain.auth.dto.AuthenticationDto;
 import com.zerobase.zbcharger.domain.auth.dto.GenerateTokenRequest;
 import com.zerobase.zbcharger.domain.auth.dto.GenerateTokenResponse;
 import com.zerobase.zbcharger.domain.auth.service.AuthService;
+import com.zerobase.zbcharger.domain.auth.service.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    private final JwtTokenProvider tokenProvider;
+    private final TokenService tokenService;
 
     /**
      * 토큰 요청
@@ -31,6 +31,6 @@ public class AuthController {
         @Valid @RequestBody GenerateTokenRequest request) {
         AuthenticationDto authentication = authService.authenticate(request);
         return ResponseEntity.ok(
-            GenerateTokenResponse.from(tokenProvider.generateToken(authentication)));
+            GenerateTokenResponse.from(tokenService.generateToken(authentication)));
     }
 }
