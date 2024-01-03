@@ -1,0 +1,30 @@
+### 카드 발급
+POST {{host}}/memberships/issue
+Authorization: Bearer {{accessToken}}
+content-type: application/json
+accept: application/json
+
+{
+  "cardType": "PHYSICAL"
+}
+
+> {%
+  client.global.set("cardNo", response.body.cardNo);
+%}
+
+
+### 카드 등록
+POST {{host}}/memberships/register
+Authorization: Bearer {{accessToken}}
+content-type: application/json
+accept: application/json
+
+{
+  "cardNo": "{{cardNo}}"
+}
+
+
+### 카드 조회
+GET {{host}}/memberships
+Authorization: Bearer {{accessToken}}
+accept: application/json

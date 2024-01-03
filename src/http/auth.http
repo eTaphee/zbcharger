@@ -1,0 +1,12 @@
+POST {{host}}/auth/token
+content-type: application/json
+accept: application/json
+
+{
+    "email":"e-tap@naver.com",
+    "password":"1q2w#E$R"
+}
+
+> {%
+  client.global.set("accessToken", response.body.accessToken);
+%}
