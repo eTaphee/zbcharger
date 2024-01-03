@@ -29,5 +29,8 @@ spring:
   #        generate_statistics: true
   jwt:
     secretKey: emItc3ByaW5nLWJvb3QtemJjaGFyZ2VyLXByb2plY3Qtand0LXNlY3JldC1rZXk=
+  data.redis:
+    host: localhost
+    port: 6379
 
 api.uri: http://localhost:8080
