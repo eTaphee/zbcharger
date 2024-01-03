@@ -1,6 +1,7 @@
 package com.zerobase.zbcharger.domain.charger.entity;
 
 import com.zerobase.zbcharger.domain.common.entity.AuditableEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
@@ -27,6 +28,7 @@ public class Company extends AuditableEntity implements Persistable<String> {
      * 아이디
      */
     @Id
+    @Column(columnDefinition = "char(2)")
     private final String id;
 
     /**

@@ -33,6 +33,7 @@ public class Station extends AuditableEntity implements Persistable<String> {
     /**
      * 회사 아이디
      */
+    @Column(columnDefinition = "char(2)")
     private final String companyId;
 
     /**
@@ -53,21 +54,25 @@ public class Station extends AuditableEntity implements Persistable<String> {
     /**
      * 지역 코드
      */
+    @Column(columnDefinition = "char(2)")
     private final String areaCode;
 
     /**
      * 지역구분 상세 코드
      */
+    @Column(columnDefinition = "char(5)")
     private final String areaDetailCode;
 
     /**
      * 충전소 구분 코드
      */
+    @Column(columnDefinition = "char(2)")
     private final String stationKindCode;
 
     /**
      * 충전소 구분 상세 코드
      */
+    @Column(columnDefinition = "char(4)")
     private final String stationKindDetailCode;
 
     /**
@@ -88,7 +93,7 @@ public class Station extends AuditableEntity implements Persistable<String> {
     /**
      * 이용제한 사유
      */
-    private final boolean useLimitDetail;
+    private final String useLimitDetail;
 
     /**
      * 편의제공 여부
