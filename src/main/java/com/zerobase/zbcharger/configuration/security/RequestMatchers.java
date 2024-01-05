@@ -10,7 +10,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public final class RequestMatchers {
 
     private static final String[] PERMIT_ALL_WHITELIST = {
-        "/smartropay/**",
+        "/payment/**",
         "/members/register",
         "/member/email/verify",
         "/auth/token",

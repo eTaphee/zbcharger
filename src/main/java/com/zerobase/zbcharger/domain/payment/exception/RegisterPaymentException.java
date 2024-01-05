@@ -8,6 +8,11 @@ public class RegisterPaymentException extends RuntimeException {
 
     private final Map<String, Object> payload;
 
+    public RegisterPaymentException(String message) {
+        super(message);
+        this.payload = Collections.emptyMap();
+    }
+
     public RegisterPaymentException(String message, Map<String, Object> payload) {
         super(message);
         this.payload = payload;
