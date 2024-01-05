@@ -3,7 +3,6 @@ package com.zerobase.zbcharger.domain.payment.service.naver;
 import static com.zerobase.zbcharger.domain.payment.api.naver.dto.constant.NaverPayApiResponseCode.INVALID_MERCHANT;
 import static com.zerobase.zbcharger.domain.payment.api.naver.dto.constant.NaverPayApiResponseCode.MAINTENANCE_ONGOING;
 
-import com.zerobase.zbcharger.domain.member.dao.MemberRepository;
 import com.zerobase.zbcharger.domain.payment.api.naver.NaverPayApi;
 import com.zerobase.zbcharger.domain.payment.api.naver.dto.ApprovalRecurrentRegistrationResponseBody;
 import com.zerobase.zbcharger.domain.payment.api.naver.dto.NaverPayResponse;
@@ -19,7 +18,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,41 +26,34 @@ import org.springframework.stereotype.Service;
  * 네이버페이 정기/반복결제 등록 서비스
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class RegisterNaverPayService extends RegisterPaymentService<NaverPayCallback> {
 
     private final static String SUCCESS = "Success";
-
-    private final PaymentMethodRepository paymentMethodRepository;
-    private final MemberRepository memberRepository;
-
     private final NaverPayApi naverPayApi;
 
     @Value("${payment.naver.client-id}")
     private String clientId;
-
     @Value("${payment.naver.client-secret}")
     private String clientSecret;
-
     @Value("${payment.naver.chain-id}")
     private String chainId;
 
+    public RegisterNaverPayService(NaverPayApi naverPayApi,
+        PaymentMethodRepository paymentMethodRepository) {
+        super(paymentMethodRepository);
+        this.naverPayApi = naverPayApi;
+    }
+
     @Override
-    protected PaymentMethod registerInternal(NaverPayCallback callback) {
+    protected PaymentMethod createPaymentMethod(NaverPayCallback callback) {
         isSuccessResult(callback);
 
         var response = approvalRecurrentRegistration(callback);
         Recurrent recurrent = getRegisteredRecurrent(response.body().recurrentId());
 
-        long memberId = getMemberId(callback.getUserEmail());
-        NaverPay payment = createNaverPay(response.body().recurrentId(), recurrent, memberId);
-
-        if (paymentMethodRepository.countByMemberId(memberId) == 0) {
-            payment.setPrimary();
-        }
-
-        return paymentMethodRepository.save(payment);
+        return createNaverPay(response.body().recurrentId(), recurrent,
+            callback.getMemberId());
     }
 
     @Override
@@ -157,15 +148,14 @@ public class RegisterNaverPayService extends RegisterPaymentService<NaverPayCall
             .orElse(null);
     }
 
-    private Long getMemberId(String mallUserId) {
-        return memberRepository.findIdByEmail(mallUserId).orElseThrow(
-            () -> {
-                Map<String, Object> payload = new HashMap<>();
-                payload.put("mallUserId", mallUserId);
-                return new RegisterPaymentException("존재하지 않는 회원입니다.", payload);
-            });
-    }
-
+    /**
+     * 네이버페이 결제 수단 생성
+     *
+     * @param recurrentId 정기/반복결제 등록 번호
+     * @param recurrent   정기/반복결제 정보
+     * @param memberId    회원 아이디
+     * @return 네이버페이 결제 수단
+     */
     private static NaverPay createNaverPay(String recurrentId, Recurrent recurrent, Long memberId) {
         if (recurrent == null) {
             return NaverPay.builder()

@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 스마트로페이 결제 콜백 DTO
+ */
 @Getter
 public class SmartroPayCallback extends RegisterPaymentCallback {
 
@@ -12,7 +15,6 @@ public class SmartroPayCallback extends RegisterPaymentCallback {
     private final String orderId;
     private final String transactionId;
     private final String billTokenKey;
-    private final String mallUserId;
     private final String resultCode;
     private final String resultMessage;
     private final String verifyValue;
@@ -29,12 +31,12 @@ public class SmartroPayCallback extends RegisterPaymentCallback {
         String resultMessage, String verifyValue, String issuerCardCode, String issuerCardName,
         String displayCardNumber, LocalDateTime cardExpire, String encodingType,
         boolean returnUrlEncodingUse) {
+        super(Long.parseLong(mallUserId));
         this.payMethod = payMethod;
         this.merchantId = merchantId;
         this.orderId = orderId;
         this.transactionId = transactionId;
         this.billTokenKey = billTokenKey;
-        this.mallUserId = mallUserId;
         this.resultCode = resultCode;
         this.resultMessage = resultMessage;
         this.verifyValue = verifyValue;

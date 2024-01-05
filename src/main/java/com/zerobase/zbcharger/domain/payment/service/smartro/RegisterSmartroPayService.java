@@ -1,6 +1,5 @@
 package com.zerobase.zbcharger.domain.payment.service.smartro;
 
-import com.zerobase.zbcharger.domain.member.dao.MemberRepository;
 import com.zerobase.zbcharger.domain.payment.dao.PaymentMethodRepository;
 import com.zerobase.zbcharger.domain.payment.dto.SmartroPayCallback;
 import com.zerobase.zbcharger.domain.payment.entity.PaymentMethod;
@@ -13,36 +12,36 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * 스마트로 페이 빌링 키 발급 서비스
+ */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class RegisterSmartroPayService extends RegisterPaymentService<SmartroPayCallback> {
 
     private static final String SUCCESS = "3001";
 
-    private final PaymentMethodRepository paymentMethodRepository;
-    private final MemberRepository memberRepository;
-
     @Value("${payment.smartro.merchant-key}")
     private String merchantKey;
 
+    public RegisterSmartroPayService(PaymentMethodRepository paymentMethodRepository) {
+        super(paymentMethodRepository);
+    }
+
     @Override
-    protected PaymentMethod registerInternal(SmartroPayCallback callback) {
+    protected PaymentMethod createPaymentMethod(SmartroPayCallback callback) {
         isSuccessResult(callback);
 
         String billTokenKey = decodeBillTokenKey(callback.getBillTokenKey());
         String verifyValue = generateVerifyValue(billTokenKey, callback);
         verifyForgery(verifyValue, callback.getVerifyValue());
 
-        Long memberId = getMemberId(callback.getMallUserId());
-
-        SmartroPay payment = SmartroPay.builder()
-            .memberId(memberId)
+        return SmartroPay.builder()
+            .memberId(callback.getMemberId())
             .orderId(callback.getOrderId())
             .transactionId(callback.getTransactionId())
             .billTokenKey(billTokenKey)
@@ -51,12 +50,6 @@ public class RegisterSmartroPayService extends RegisterPaymentService<SmartroPay
             .displayCardNo(callback.getDisplayCardNumber())
             .cardExpire(callback.getCardExpire())
             .build();
-
-        if (paymentMethodRepository.countByMemberId(memberId) == 0) {
-            payment.setPrimary();
-        }
-
-        return paymentMethodRepository.save(payment);
     }
 
     @Override
@@ -145,12 +138,4 @@ public class RegisterSmartroPayService extends RegisterPaymentService<SmartroPay
         }
     }
 
-    private Long getMemberId(String mallUserId) {
-        return memberRepository.findIdByEmail(mallUserId).orElseThrow(
-            () -> {
-                Map<String, Object> payload = new HashMap<>();
-                payload.put("mallUserId", mallUserId);
-                return new RegisterPaymentException("존재하지 않는 회원입니다.", payload);
-            });
-    }
 }
