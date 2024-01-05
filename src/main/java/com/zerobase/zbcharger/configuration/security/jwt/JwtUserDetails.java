@@ -4,10 +4,12 @@ import com.zerobase.zbcharger.domain.member.entity.Member;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Getter
 public class JwtUserDetails implements UserDetails {
 
     private final static String ROLE_PREFIX = "ROLE_";

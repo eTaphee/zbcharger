@@ -1,6 +1,7 @@
 package com.zerobase.zbcharger.domain.charger.entity;
 
 import com.zerobase.zbcharger.domain.common.entity.AuditableEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
@@ -38,6 +39,7 @@ public class Charger extends AuditableEntity implements Persistable<String> {
     /**
      * 충전기 타입
      */
+    @Column(columnDefinition = "char(2)")
     private final String chargerType;
 
     /**

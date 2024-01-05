@@ -3,6 +3,7 @@ package com.zerobase.zbcharger.configuration.security.filter;
 import static com.zerobase.zbcharger.configuration.security.RequestMatchers.JWT_FILTER_REQUEST_MATCHER;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.TOKEN_EXPIRED;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.TOKEN_INVALID;
+import static com.zerobase.zbcharger.exception.constant.ErrorCode.TOKEN_REQUIRED;
 
 import com.zerobase.zbcharger.configuration.security.jwt.JwtAuthenticationException;
 import com.zerobase.zbcharger.configuration.security.jwt.JwtAuthenticationToken;
@@ -16,16 +17,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 /**
  * JWT 인증 필터
  */
-@Component
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final String TOKEN_HEADER = "Authorization";
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
         String accessToken = obtainAccessToken(request);
         if (ObjectUtils.isEmpty(accessToken)) {
-            return null;
+            throw new JwtAuthenticationException(TOKEN_REQUIRED);
         }
         Claims claims = obtainClaims(accessToken);
 
@@ -55,7 +55,6 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
             accessToken);
 
         return this.getAuthenticationManager().authenticate(authRequest);
-
     }
 
     @Nullable

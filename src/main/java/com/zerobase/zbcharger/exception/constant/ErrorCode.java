@@ -2,6 +2,7 @@ package com.zerobase.zbcharger.exception.constant;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -21,6 +22,13 @@ public enum ErrorCode {
     AUTHENTICATION_INVALID(UNAUTHORIZED, "아이디를 찾을 수 없거나, 비밀번호가 일치하지 않습니다."),
     TOKEN_INVALID(UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     TOKEN_EXPIRED(UNAUTHORIZED, "토큰이 만료됐습니다."),
+    TOKEN_REQUIRED(UNAUTHORIZED, "토큰이 필요합니다."),
+
+    MEMBERSHIP_CARD_ALREADY_ISSUED(BAD_REQUEST, "멤버십 카드를 이미 발급받았습니다."),
+    MEMBERSHIP_CARD_ALREADY_REGISTERED(BAD_REQUEST, "이미 등록된 멤버십 카드입니다."),
+    MEMBERSHIP_CARD_NOT_FOUND(NOT_FOUND, "멤버십 카드를 찾을 수 없습니다."),
+    ONLY_PHYSICAL_CARD_COULD_REGISTER(BAD_REQUEST, "물리 카드만 등록할 수 있습니다."),
+    ACCESS_DENIED(FORBIDDEN, "접근 권한이 없습니다."),
 
     EMAIL_ALREADY_EXISTS(CONFLICT, "중복되는 메일이 존재합니다."),
 
