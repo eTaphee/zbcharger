@@ -1,0 +1,28 @@
+### 스마트로 결제 수단 등록 (빌링 키 발급)
+POST {{host}}/payment/smartropay/issue-billing-callback
+Content-Type: application/x-www-form-urlencoded
+
+PayMethod = CARD &
+Mid = ZBCharger &
+BuyerName = 이태희 &
+Moid = 20190919123456789 &
+Tid = 20190919123456789 &
+BillTokenKey = OdoUbgo4EaqxLN9PtmPHIw== &
+MallUserId = 40 &
+ResultCode = 3001 &
+ResultMsg = 성공 &
+MallReserved = 20190919123456789 &
+VerifyValue = oRdbWkxpttFSESFuN4C329YWuvvLjBGwmW6XgUbo4ts= &
+IssuerCardCd = 11 &
+IssuerCardNm = 땡땡카드 &
+DisplayCardNo = 5239-****-****-9001 &
+CardExpire = 205012312400 &
+EncodingType = UTF8 &
+RtnUrlEncUse = Y
+
+### 네이버페이 결제 수단 등록 (정기/반복결제 등록 번호 발급)
+GET {{host}}/payment/naverpay/register-recurrent-payment-callback?resultCode=Success&reservedId=1234567890&tempReceiptId=abcdefg&recurrentId=recurrent12345&userEmail=e-tap@naver.com
+
+### 대표 결제 수단 변경
+POST {{host}}/payments/10/set-primary
+Authorization: Bearer {{accessToken}}

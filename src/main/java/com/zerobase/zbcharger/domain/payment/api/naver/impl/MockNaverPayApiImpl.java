@@ -8,7 +8,6 @@ import com.zerobase.zbcharger.domain.payment.api.naver.dto.NaverPayResponse;
 import com.zerobase.zbcharger.domain.payment.api.naver.dto.Recurrent;
 import com.zerobase.zbcharger.domain.payment.api.naver.dto.SearchRegisteredRecurrentRequest;
 import com.zerobase.zbcharger.domain.payment.api.naver.dto.SearchRegisteredRecurrentResponseBody;
-import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,7 +24,7 @@ public class MockNaverPayApiImpl implements NaverPayApi {
             new ApprovalRecurrentRegistrationResponseBody(
                 reserveId,
                 tempReceiptId,
-                UUID.randomUUID().toString(),
+                "RECURRENT_ID:" + reserveId,
                 "ACTION",
                 null));
     }

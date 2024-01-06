@@ -6,8 +6,10 @@ import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @DiscriminatorValue("CARD")
 @NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)

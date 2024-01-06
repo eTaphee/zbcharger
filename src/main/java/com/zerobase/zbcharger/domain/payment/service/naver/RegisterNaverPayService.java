@@ -17,7 +17,6 @@ import com.zerobase.zbcharger.domain.payment.service.RegisterPaymentService;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,7 @@ public class RegisterNaverPayService extends RegisterPaymentService<NaverPayCall
 
     private final static String SUCCESS = "Success";
     private final NaverPayApi naverPayApi;
+    private final IdempotencyKeyGenerator idempotencyKeyGenerator;
 
     @Value("${payment.naver.client-id}")
     private String clientId;
@@ -40,9 +40,11 @@ public class RegisterNaverPayService extends RegisterPaymentService<NaverPayCall
     private String chainId;
 
     public RegisterNaverPayService(NaverPayApi naverPayApi,
-        PaymentMethodRepository paymentMethodRepository) {
+        PaymentMethodRepository paymentMethodRepository,
+        IdempotencyKeyGenerator idempotencyKeyGenerator) {
         super(paymentMethodRepository);
         this.naverPayApi = naverPayApi;
+        this.idempotencyKeyGenerator = idempotencyKeyGenerator;
     }
 
     @Override
@@ -63,7 +65,7 @@ public class RegisterNaverPayService extends RegisterPaymentService<NaverPayCall
             .reserveId(params.get("reserveId"))
             .resultMessage(params.getOrDefault("resultMessage", null))
             .tempReceiptId(params.getOrDefault("tempReceiptId", null))
-            .tempReceiptId(params.getOrDefault("recurrentId", null))
+            .recurrentId(params.getOrDefault("recurrentId", null))
             .userEmail(params.get("userEmail"))
             .build();
     }
@@ -96,7 +98,7 @@ public class RegisterNaverPayService extends RegisterPaymentService<NaverPayCall
             clientId,
             clientSecret,
             chainId,
-            UUID.randomUUID().toString(),
+            idempotencyKeyGenerator.getIdempotencyKey(),
             callback.getReserveId(),
             callback.getTempReceiptId());
 
