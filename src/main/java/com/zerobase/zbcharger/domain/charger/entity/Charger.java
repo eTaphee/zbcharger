@@ -93,6 +93,7 @@ public class Charger extends AuditableEntity implements Persistable<String> {
     private final String deleteDetail;
 
     @Transient
+    @Builder.Default
     private boolean isNew = true;
 
     @Override

@@ -113,6 +113,7 @@ public class Station extends AuditableEntity implements Persistable<String> {
     private final Double longitude;
 
     @Transient
+    @Builder.Default
     private boolean isNew = true;
 
     @Override

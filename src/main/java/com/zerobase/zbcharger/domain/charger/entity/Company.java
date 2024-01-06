@@ -47,6 +47,7 @@ public class Company extends AuditableEntity implements Persistable<String> {
     private final String operator;
 
     @Transient
+    @Builder.Default
     private boolean isNew = true;
 
     @Override
