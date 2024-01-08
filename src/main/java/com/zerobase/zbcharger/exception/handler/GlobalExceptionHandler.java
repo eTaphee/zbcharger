@@ -1,8 +1,10 @@
 package com.zerobase.zbcharger.exception.handler;
 
+import static com.zerobase.zbcharger.exception.constant.ErrorCode.ACCESS_DENIED;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.ARGUMENT_NOT_VALID;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.UNHANDLED_ERROR;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.zerobase.zbcharger.exception.CustomException;
@@ -10,6 +12,7 @@ import com.zerobase.zbcharger.exception.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,6 +56,19 @@ public class GlobalExceptionHandler {
                 ARGUMENT_NOT_VALID,
                 null),
             BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    private ResponseEntity<ErrorResponse> handleHandlerAccessDeniedException(
+        HttpServletRequest request,
+        AccessDeniedException e) {
+        log.error("AccessDeniedException is occurred.", e);
+        return new ResponseEntity<>(
+            ErrorResponse.of(
+                request.getRequestURI(),
+                ACCESS_DENIED,
+                null),
+            FORBIDDEN);
     }
 
     @ExceptionHandler(RuntimeException.class)

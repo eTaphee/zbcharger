@@ -30,6 +30,10 @@ public enum ErrorCode {
     ONLY_PHYSICAL_CARD_COULD_REGISTER(BAD_REQUEST, "물리 카드만 등록할 수 있습니다."),
     ACCESS_DENIED(FORBIDDEN, "접근 권한이 없습니다."),
 
+    COMPANY_ALREADY_EXISTS(CONFLICT, "이미 존재하는 회사입니다."),
+    COMPANY_NOT_FOUND(NOT_FOUND, "회사를 찾을 수 없습니다."),
+    COMPANY_ALREADY_DELETED(BAD_REQUEST, "이미 삭제된 회사입니다."),
+
     PAYMENT_METHOD_NOT_FOUND(NOT_FOUND, "결제 수단을 찾을 수 없습니다."),
 
     EMAIL_ALREADY_EXISTS(CONFLICT, "중복되는 메일이 존재합니다."),

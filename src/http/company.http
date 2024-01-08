@@ -1,0 +1,30 @@
+### 회사 추가
+POST {{host}}/admin/companies
+Authorization: Bearer {{accessToken}}
+content-type: application/json
+
+{
+  "id": "ZB",
+  "name": "아우토크립트",
+  "tel": "01092592915",
+  "operator": "아우토크립트"
+}
+
+### 회사 수정
+PATCH {{host}}/admin/companies/ZB
+Authorization: Bearer {{accessToken}}
+content-type: application/json
+
+{
+  "name": "아우토크립트22",
+  "tel": "070-9999-1234",
+  "operator": "아우토크립트22"
+}
+
+### 회사 삭제
+DELETE {{host}}/admin/companies/ZB
+Authorization: Bearer {{accessToken}}
+
+### 회사 조회
+GET {{host}}/admin/companies
+Authorization: Bearer {{accessToken}}

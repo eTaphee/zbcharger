@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 회사 정보
  */
+@Getter
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CompanyInfo {
@@ -16,7 +17,6 @@ public class CompanyInfo {
     /**
      * 회사 아이디
      */
-    @Getter
     private final String id;
 
     /**
@@ -40,6 +40,15 @@ public class CompanyInfo {
             .name(name)
             .tel(call)
             .operator(operator)
+            .build();
+    }
+
+    public static CompanyInfo fromEntity(Company company) {
+        return CompanyInfo.builder()
+            .id(company.getId())
+            .name(company.getName())
+            .call(company.getTel())
+            .operator(company.getOperator())
             .build();
     }
 }
