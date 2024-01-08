@@ -34,6 +34,10 @@ public enum ErrorCode {
     COMPANY_NOT_FOUND(NOT_FOUND, "회사를 찾을 수 없습니다."),
     COMPANY_ALREADY_DELETED(BAD_REQUEST, "이미 삭제된 회사입니다."),
 
+    STATION_ALREADY_EXISTS(CONFLICT, "이미 존재하는 충전소입니다."),
+    STATION_NOT_FOUND(NOT_FOUND, "충전소를 찾을 수 없습니다."),
+    STATION_ALREADY_DELETED(BAD_REQUEST, "이미 삭제된 충전소입니다."),
+
     PAYMENT_METHOD_NOT_FOUND(NOT_FOUND, "결제 수단을 찾을 수 없습니다."),
 
     EMAIL_ALREADY_EXISTS(CONFLICT, "중복되는 메일이 존재합니다."),

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 충전소 정보
  */
+@Getter
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class StationInfo {
@@ -16,7 +17,6 @@ public class StationInfo {
     /**
      * 충전소 아이디
      */
-    @Getter
     private final String id;
 
     /**
@@ -112,5 +112,27 @@ public class StationInfo {
             .latitude(latitude)
             .longitude(longitude)
             .build();
+    }
+
+    public static StationInfo fromEntity(Station station) {
+        return StationInfo.builder()
+            .id(station.getId())
+            .companyId(station.getCompanyId())
+            .name(station.getName())
+            .address(station.getAddress())
+            .useTime(station.getUseTime())
+            .areaCode(station.getAreaCode())
+            .areaDetailCode(station.getAreaDetailCode())
+            .stationKindCode(station.getStationKindCode())
+            .stationKindDetailCode(station.getStationKindDetailCode())
+            .parkingFreeYn(station.isParkingFreeYn())
+            .note(station.getNote())
+            .limitYn(station.isUseLimitYn())
+            .limitDetail(station.getUseLimitDetail())
+            .trafficYn(station.isTrafficYn())
+            .latitude(station.getLatitude())
+            .longitude(station.getLongitude())
+            .build();
+
     }
 }
