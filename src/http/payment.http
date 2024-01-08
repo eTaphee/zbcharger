@@ -21,7 +21,7 @@ EncodingType = UTF8 &
 RtnUrlEncUse = Y
 
 ### 네이버페이 결제 수단 등록 (정기/반복결제 등록 번호 발급)
-GET {{host}}/payment/naverpay/register-recurrent-payment-callback?resultCode=Success&reservedId=1234567890&tempReceiptId=abcdefg&recurrentId=recurrent12345&userEmail=e-tap@naver.com
+GET {{host}}/payment/naverpay/register-recurrent-payment-callback?resultCode=Success&reservedId=1234567890&tempReceiptId=abcdefg&recurrentId=recurrent12345&userEmail=e-tap@naver.com&memberId=40
 
 ### 대표 결제 수단 변경
 POST {{host}}/payments/10/set-primary

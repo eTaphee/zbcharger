@@ -17,7 +17,7 @@ public class NaverPayCallback extends RegisterPaymentCallback {
     private final String userEmail;
 
     @Builder
-    public NaverPayCallback(Long memberId, String resultCode, String resultMessage,
+    private NaverPayCallback(Long memberId, String resultCode, String resultMessage,
         String reserveId, String tempReceiptId, String recurrentId, String userEmail) {
         super(memberId);
         this.resultCode = resultCode;

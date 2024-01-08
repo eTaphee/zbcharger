@@ -58,17 +58,17 @@ public class RegisterNaverPayService extends RegisterPaymentService<NaverPayCall
             callback.getMemberId());
     }
 
-    @Override
-    protected NaverPayCallback toPaymentCallback(Map<String, String> params) {
-        return NaverPayCallback.builder()
-            .resultCode(params.get("resultCode"))
-            .reserveId(params.get("reserveId"))
-            .resultMessage(params.getOrDefault("resultMessage", null))
-            .tempReceiptId(params.getOrDefault("tempReceiptId", null))
-            .recurrentId(params.getOrDefault("recurrentId", null))
-            .userEmail(params.get("userEmail"))
-            .build();
-    }
+//    @Override
+//    protected NaverPayCallback toPaymentCallback(Map<String, String> params) {
+//        return NaverPayCallback.builder()
+//            .resultCode(params.get("resultCode"))
+//            .reserveId(params.get("reserveId"))
+//            .resultMessage(params.getOrDefault("resultMessage", null))
+//            .tempReceiptId(params.getOrDefault("tempReceiptId", null))
+//            .recurrentId(params.getOrDefault("recurrentId", null))
+//            .userEmail(params.get("userEmail"))
+//            .build();
+//    }
 
     /**
      * 콜백 결과 확인
