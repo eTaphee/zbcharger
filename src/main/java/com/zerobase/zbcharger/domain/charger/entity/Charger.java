@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Persistable;
 /**
  * 충전기
  */
+@Getter
 @Entity
 @DynamicUpdate
 @Builder
@@ -40,57 +42,57 @@ public class Charger extends AuditableEntity implements Persistable<String> {
      * 충전기 타입
      */
     @Column(columnDefinition = "char(2)")
-    private final String chargerType;
+    private String chargerType;
 
     /**
      * 위치
      */
-    private final String location;
+    private String location;
 
     /**
      * 상태
      */
-    private final int stat;
+    private int stat;
 
     /**
      * 충전 용량
      */
-    private final String output;
+    private String output;
 
     /**
      * 충전 방식
      */
-    private final String method;
+    private String method;
 
     /**
      * 상태 갱신 일시
      */
-    private final LocalDateTime statUpdatedAt;
+    private LocalDateTime statUpdatedAt;
 
     /**
      * 마지막 충전시작 일시
      */
-    private final LocalDateTime lastChargeStartedAt;
+    private LocalDateTime lastChargeStartedAt;
 
     /**
      * 마지막 충전종료 일시
      */
-    private final LocalDateTime lastChargeFinishedAt;
+    private LocalDateTime lastChargeFinishedAt;
 
     /**
      * 현재 충전시작 일시
      */
-    private final LocalDateTime nowChargeStartedAt;
+    private LocalDateTime nowChargeStartedAt;
 
     /**
      * 삭제 여부
      */
-    private final boolean deletedYn;
+    private boolean deletedYn;
 
     /**
      * 삭제 사유
      */
-    private final String deleteDetail;
+    private String deleteDetail;
 
     @Transient
     @Builder.Default
@@ -108,5 +110,20 @@ public class Charger extends AuditableEntity implements Persistable<String> {
 
     public void setIsNewForPersistable(boolean isNew) {
         this.isNew = isNew;
+    }
+
+    public void delete() {
+        this.deletedYn = true;
+    }
+
+    public void restore() {
+        this.deletedYn = false;
+    }
+
+    public void update(String chargerType, String location, String output, String method) {
+        this.chargerType = chargerType;
+        this.location = location;
+        this.output = output;
+        this.method = method;
     }
 }
