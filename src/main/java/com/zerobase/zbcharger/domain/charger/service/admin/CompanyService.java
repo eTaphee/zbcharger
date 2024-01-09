@@ -1,15 +1,16 @@
-package com.zerobase.zbcharger.domain.charger.service;
+package com.zerobase.zbcharger.domain.charger.service.admin;
 
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.COMPANY_ALREADY_DELETED;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.COMPANY_ALREADY_EXISTS;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.COMPANY_NOT_FOUND;
 
 import com.zerobase.zbcharger.domain.charger.dao.CompanyRepository;
-import com.zerobase.zbcharger.domain.charger.dto.AddCompanyRequest;
-import com.zerobase.zbcharger.domain.charger.dto.CompanyInfo;
-import com.zerobase.zbcharger.domain.charger.dto.UpdateCompanyRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.AddCompanyRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.CompanyResponse;
+import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateCompanyRequest;
 import com.zerobase.zbcharger.domain.charger.entity.Company;
 import com.zerobase.zbcharger.exception.CustomException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-public class CompanyAdminService {
+public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
@@ -33,18 +34,11 @@ public class CompanyAdminService {
      */
     @Transactional
     public String addCompany(AddCompanyRequest request) {
-        Company company = companyRepository.findById(request.id()).orElse(null);
+        Company company = getCompanyOrNull(request.id());
 
         throwIfCompanyExists(company);
 
-        if (company == null) {
-            company = request.toEntity();
-            companyRepository.save(company);
-        } else {
-            company.restore();
-        }
-
-        return company.getId();
+        return addOrResotreCompany(request, company).getId();
     }
 
     /**
@@ -74,7 +68,6 @@ public class CompanyAdminService {
         throwIfCompanyDeleted(company);
 
         company.delete();
-
         // TODO: station, charger delete 여부
     }
 
@@ -85,8 +78,8 @@ public class CompanyAdminService {
      * @return 회사 목록
      */
     @Transactional(readOnly = true)
-    public Page<CompanyInfo> getCompanyList(Pageable pageable) {
-        return companyRepository.findAll(pageable).map(CompanyInfo::fromEntity);
+    public Page<CompanyResponse> getCompanyList(Pageable pageable) {
+        return companyRepository.findAll(pageable).map(CompanyResponse::fromEntity);
     }
 
     private void throwIfCompanyExists(Company company) {
@@ -102,7 +95,21 @@ public class CompanyAdminService {
     }
 
     private Company getCompanyOrThrow(String id) {
-        return companyRepository.findById(id)
+        return Optional.ofNullable(getCompanyOrNull(id))
             .orElseThrow(() -> new CustomException(COMPANY_NOT_FOUND));
+    }
+
+    private Company getCompanyOrNull(String id) {
+        return companyRepository.findById(id).orElse(null);
+    }
+
+    private Company addOrResotreCompany(AddCompanyRequest request, Company company) {
+        if (company == null) {
+            company = request.toEntity();
+            companyRepository.save(company);
+        } else {
+            company.restore();
+        }
+        return company;
     }
 }

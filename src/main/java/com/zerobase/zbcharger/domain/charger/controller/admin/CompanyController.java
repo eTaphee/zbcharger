@@ -1,10 +1,10 @@
-package com.zerobase.zbcharger.domain.charger.controller;
+package com.zerobase.zbcharger.domain.charger.controller.admin;
 
 import com.zerobase.zbcharger.configuration.security.annotation.RoleAdmin;
-import com.zerobase.zbcharger.domain.charger.dto.AddCompanyRequest;
-import com.zerobase.zbcharger.domain.charger.dto.CompanyInfo;
-import com.zerobase.zbcharger.domain.charger.dto.UpdateCompanyRequest;
-import com.zerobase.zbcharger.domain.charger.service.CompanyAdminService;
+import com.zerobase.zbcharger.domain.charger.dto.admin.AddCompanyRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.CompanyResponse;
+import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateCompanyRequest;
+import com.zerobase.zbcharger.domain.charger.service.admin.CompanyService;
 import com.zerobase.zbcharger.util.ResponseEntityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/companies")
 @RequiredArgsConstructor
-public class CompanyAdminController {
+public class CompanyController {
 
-    private final CompanyAdminService companyAdminService;
+    private final CompanyService companyAdminService;
 
     @PostMapping
     public ResponseEntity<Void> addCompany(@Valid @RequestBody AddCompanyRequest request) {
@@ -36,7 +36,7 @@ public class CompanyAdminController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CompanyInfo>> getCompanyList(
+    public ResponseEntity<Page<CompanyResponse>> getCompanyList(
         @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(companyAdminService.getCompanyList(pageable));
     }

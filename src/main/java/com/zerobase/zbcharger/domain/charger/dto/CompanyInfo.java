@@ -42,13 +42,4 @@ public class CompanyInfo {
             .operator(operator)
             .build();
     }
-
-    public static CompanyInfo fromEntity(Company company) {
-        return CompanyInfo.builder()
-            .id(company.getId())
-            .name(company.getName())
-            .call(company.getTel())
-            .operator(company.getOperator())
-            .build();
-    }
 }
