@@ -7,6 +7,7 @@ import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringLocalDateTim
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +15,8 @@ import lombok.RequiredArgsConstructor;
  * 충전기 정보
  */
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChargerInfo {
 
     /**
@@ -176,7 +178,7 @@ public class ChargerInfo {
      * 이용자 제한
      */
     @JsonDeserialize(using = StringBooleanDeserializer.class)
-    private boolean limitYn;
+    private final boolean limitYn;
 
     /**
      * 이용제한 사유
@@ -200,7 +202,7 @@ public class ChargerInfo {
      * 편의 제공 여부
      */
     @JsonDeserialize(using = StringBooleanDeserializer.class)
-    private boolean trafficYn;
+    private final boolean trafficYn;
 
     public CompanyInfo getCompany() {
         return CompanyInfo.builder()

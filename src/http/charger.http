@@ -1,0 +1,34 @@
+### 충전기 조회
+GET {{host}}/admin/chargers
+Authorization: Bearer {{accessToken}}
+
+
+### 충전기 등록
+POST {{host}}/admin/chargers
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "id": "string",
+  "stationId": "ACAC0002",
+  "chargerType": "02",
+  "location": "지하1층",
+  "output": "250",
+  "method": "단독"
+}
+
+### 충전기 삭제
+DELETE {{host}}/admin/chargers/string
+Authorization: Bearer {{accessToken}}
+
+### 충전기 수정
+PATCH {{host}}/admin/chargers/string
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "chargerType": "02",
+  "location": "지하12층",
+  "output": "250",
+  "method": "단독"
+}

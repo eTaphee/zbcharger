@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.zerobase.zbcharger.domain.payment.dao.PaymentMethodRepository;
+import com.zerobase.zbcharger.domain.payment.dto.NaverPayCallback;
+import com.zerobase.zbcharger.domain.payment.dto.SmartroPayCallback;
 import com.zerobase.zbcharger.domain.payment.entity.NaverPay;
 import com.zerobase.zbcharger.domain.payment.entity.PaymentMethod;
 import com.zerobase.zbcharger.domain.payment.entity.SmartroPay;
@@ -13,6 +15,8 @@ import com.zerobase.zbcharger.domain.payment.service.smartro.RegisterSmartroPayS
 import com.zerobase.zbcharger.exception.CustomException;
 import java.util.HashMap;
 import java.util.Map;
+import org.aspectj.weaver.ast.Call;
+import org.checkerframework.checker.units.qual.N;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,13 +47,14 @@ class RegisterPaymentServiceTest {
         // given
         String reserveId = "reserveId";
 
-        Map<String, String> params = new HashMap<>();
-        params.put("resultCode", "Success");
-        params.put("reserveId", reserveId);
-        params.put("tempReceiptId", "tempReceiptId");
+        NaverPayCallback callback = NaverPayCallback.builder()
+            .resultCode("Success")
+            .reserveId(reserveId)
+            .tempReceiptId("tempReceiptId")
+            .build();
 
         // when
-        registerNaverPayService.registerPaymentMethod(params);
+        registerNaverPayService.registerPaymentMethod(callback);
         PaymentMethod paymentMethod = paymentMethodRepository.findAll().get(0);
 
         // then
@@ -62,13 +67,14 @@ class RegisterPaymentServiceTest {
     @Transactional
     void failRegisterNaverPaymentMethod() {
         // given
-        Map<String, String> params = new HashMap<>();
-        params.put("resultCode", "fail");
+        NaverPayCallback callback = NaverPayCallback.builder()
+            .resultCode("fail")
+            .build();
 
         // when
         // then
         assertThrows(CustomException.class,
-            () -> registerNaverPayService.registerPaymentMethod(params));
+            () -> registerNaverPayService.registerPaymentMethod(callback));
     }
 
     @Test
@@ -76,27 +82,26 @@ class RegisterPaymentServiceTest {
     @Transactional
     void successRegisterSmartroPaymentMethod() {
         // given
-        Map<String, String> params = new HashMap<>();
-        params.put("ResultCode", "3001");
-        params.put("ResultMsg", "성공");
-        params.put("PayMethod", "CARD");
-        params.put("Mid", "ZBCharger");
-        params.put("BuyerName", "Lee");
-        params.put("Moid", "orderid");
-        params.put("Tid", "transactionid");
-        params.put("BillTokenKey", "OdoUbgo4EaqxLN9PtmPHIw==");
-        params.put("MallUserId", "0");
-        params.put("MallReserved", "MallReserved");
-        params.put("VerifyValue", "oRdbWkxpttFSESFuN4C329YWuvvLjBGwmW6XgUbo4ts=");
-        params.put("IssuerCardCd", "11");
-        params.put("IssuerCardNm", "땡땡카드");
-        params.put("DisplayCardNo", "5239-****-****-9001");
-        params.put("CardExpire", "205012312400");
-        params.put("EncodingType", "UTF8");
-        params.put("RtnUrlEncUse", "Y");
+        SmartroPayCallback callback = SmartroPayCallback.builder()
+            .resultCode("3001")
+            .resultMessage("성공")
+            .payMethod("CARD")
+            .merchantId("ZBCharger")
+            .payMethod("CARD")
+            .orderId("orderid")
+            .transactionId("transactionid")
+            .billTokenKey("OdoUbgo4EaqxLN9PtmPHIw==")
+            .mallUserId("0")
+            .verifyValue("oRdbWkxpttFSESFuN4C329YWuvvLjBGwmW6XgUbo4ts=")
+            .issuerCardCode("11")
+            .issuerCardName("땡땡카드")
+            .displayCardNumber("5239-****-****-9001")
+            .encodingType("UTF8")
+            .returnUrlEncodingUse(true)
+            .build();
 
         // when
-        registerSmartroPayService.registerPaymentMethod(params);
+        registerSmartroPayService.registerPaymentMethod(callback);
         PaymentMethod paymentMethod = paymentMethodRepository.findAll().get(0);
 
         // then
@@ -109,28 +114,14 @@ class RegisterPaymentServiceTest {
     @Transactional
     void failRegisterSmartroPaymentMethod() {
         // given
-        Map<String, String> params = new HashMap<>();
-        params.put("ResultCode", "1001");
-        params.put("ResultMsg", "성공");
-        params.put("PayMethod", "CARD");
-        params.put("Mid", "ZBCharger");
-        params.put("BuyerName", "Lee");
-        params.put("Moid", "orderid");
-        params.put("Tid", "transactionid");
-        params.put("BillTokenKey", "OdoUbgo4EaqxLN9PtmPHIw==");
-        params.put("MallUserId", "0");
-        params.put("MallReserved", "MallReserved");
-        params.put("VerifyValue", "oRdbWkxpttFSESFuN4C329YWuvvLjBGwmW6XgUbo4ts=");
-        params.put("IssuerCardCd", "11");
-        params.put("IssuerCardNm", "땡땡카드");
-        params.put("DisplayCardNo", "5239-****-****-9001");
-        params.put("CardExpire", "205012312400");
-        params.put("EncodingType", "UTF8");
-        params.put("RtnUrlEncUse", "Y");
+        SmartroPayCallback callback = SmartroPayCallback.builder()
+            .resultCode("1001")
+            .mallUserId("0")
+            .build();
 
         // when
         // then
         assertThrows(CustomException.class,
-            () -> registerSmartroPayService.registerPaymentMethod(params));
+            () -> registerSmartroPayService.registerPaymentMethod(callback));
     }
 }

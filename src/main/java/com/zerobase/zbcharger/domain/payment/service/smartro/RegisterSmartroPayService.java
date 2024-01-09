@@ -8,8 +8,6 @@ import com.zerobase.zbcharger.domain.payment.exception.RegisterPaymentException;
 import com.zerobase.zbcharger.domain.payment.service.RegisterPaymentService;
 import com.zerobase.zbcharger.util.AesUtils;
 import com.zerobase.zbcharger.util.ShaUtils;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -49,28 +47,6 @@ public class RegisterSmartroPayService extends RegisterPaymentService<SmartroPay
             .issuerCardName(callback.getIssuerCardName())
             .displayCardNo(callback.getDisplayCardNumber())
             .cardExpire(callback.getCardExpire())
-            .build();
-    }
-
-    @Override
-    protected SmartroPayCallback toPaymentCallback(Map<String, String> params) {
-        return SmartroPayCallback.builder()
-            .payMethod(params.get("PayMethod"))
-            .merchantId(params.get("Mid"))
-            .orderId(params.get("Moid"))
-            .transactionId(params.get("Tid"))
-            .billTokenKey(params.get("BillTokenKey"))
-            .mallUserId(params.get("MallUserId"))
-            .resultCode(params.get("ResultCode"))
-            .resultMessage(params.get("ResultMsg"))
-            .verifyValue(params.get("VerifyValue"))
-            .issuerCardCode(params.get("IssuerCardCd"))
-            .issuerCardName(params.get("IssuerCardNm"))
-            .displayCardNumber(params.get("DisplayCardNo"))
-            .cardExpire(LocalDateTime.parse(params.get("CardExpire"),
-                DateTimeFormatter.ofPattern("yyyyMMddHHmm")))
-            .encodingType(params.get("EncodingType"))
-            .returnUrlEncodingUse("Y".equals(params.get("RtnUrlEncUse")))
             .build();
     }
 

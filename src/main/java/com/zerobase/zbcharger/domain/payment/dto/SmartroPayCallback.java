@@ -26,7 +26,7 @@ public class SmartroPayCallback extends RegisterPaymentCallback {
     private final boolean returnUrlEncodingUse;
 
     @Builder
-    public SmartroPayCallback(String payMethod, String merchantId, String orderId,
+    private SmartroPayCallback(String payMethod, String merchantId, String orderId,
         String transactionId, String billTokenKey, String mallUserId, String resultCode,
         String resultMessage, String verifyValue, String issuerCardCode, String issuerCardName,
         String displayCardNumber, LocalDateTime cardExpire, String encodingType,

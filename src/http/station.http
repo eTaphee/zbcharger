@@ -1,0 +1,47 @@
+### 충전소 추가
+POST {{host}}/admin/stations
+Authorization: Bearer {{accessToken}}
+content-type: application/json
+
+{
+  "id": "ACAC0003",
+  "name": "아우토크립트 충전소(Test)",
+  "companyId": "zw",
+  "address": "서울특별시 영등포구 여의공원로 115",
+  "useTime": "24시간 이용가능?asd",
+  "areaCode": "11",
+  "areaDetailCode": "11560",
+  "stationKindCode": "G0",
+  "stationKindDetailCode": "G004",
+  "parkingFreeYn": true,
+  "useLimitYn": true,
+  "latitude": 37.5300525,
+  "longitude": 126.926228
+}
+
+### 충전소 수정
+PATCH {{host}}/admin/stations/ACAC0001
+Authorization: Bearer {{accessToken}}
+content-type: application/json
+
+{
+  "name": "아우토크립트 충전소(Test)",
+  "address": "서울특별시 영등포구 여의공원로 115",
+  "useTime": "24시간 이용가능?asd",
+  "areaCode": "11",
+  "areaDetailCode": "11560",
+  "stationKindCode": "G0",
+  "stationKindDetailCode": "G004",
+  "parkingFreeYn": true,
+  "useLimitYn": true,
+  "latitude": 37.5300525,
+  "longitude": 126.926228
+}
+
+### 충전소 삭제
+DELETE {{host}}/admin/stations/ACAC0001
+Authorization: Bearer {{accessToken}}
+
+### 충전소 조회
+GET {{host}}/admin/stations?deletedYn=true
+Authorization: Bearer {{accessToken}}

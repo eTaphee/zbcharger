@@ -6,7 +6,6 @@ import com.zerobase.zbcharger.domain.payment.dao.PaymentMethodRepository;
 import com.zerobase.zbcharger.domain.payment.entity.PaymentMethod;
 import com.zerobase.zbcharger.domain.payment.exception.RegisterPaymentException;
 import com.zerobase.zbcharger.exception.CustomException;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +27,7 @@ public abstract class RegisterPaymentService<Callback> {
      * @param params 콜백 파라미터
      */
     @Transactional
-    public void registerPaymentMethod(Map<String, String> params) {
-        Callback callback = toPaymentCallback(params);
-
+    public void registerPaymentMethod(Callback callback) {
         PaymentMethod paymentMethod = null;
         try {
             // 벤더별 결제 수단 생성
@@ -56,12 +53,4 @@ public abstract class RegisterPaymentService<Callback> {
      * @return 결제 수단
      */
     protected abstract PaymentMethod createPaymentMethod(Callback callback);
-
-    /**
-     * 콜백 파라미터를 콜백 타입으로 변환
-     *
-     * @param params 콜백 파라미터
-     * @return 콜백 타입
-     */
-    protected abstract Callback toPaymentCallback(Map<String, String> params);
 }

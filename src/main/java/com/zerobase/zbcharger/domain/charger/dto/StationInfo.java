@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 충전소 정보
  */
+@Getter
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class StationInfo {
@@ -16,7 +17,6 @@ public class StationInfo {
     /**
      * 충전소 아이디
      */
-    @Getter
     private final String id;
 
     /**
