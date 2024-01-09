@@ -1,4 +1,4 @@
-package com.zerobase.zbcharger.domain.charger.service;
+package com.zerobase.zbcharger.domain.charger.service.admin;
 
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.CHARGER_ALREADY_DELETED;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.CHARGER_ALREADY_EXISTS;
@@ -7,11 +7,13 @@ import static com.zerobase.zbcharger.exception.constant.ErrorCode.STATION_NOT_FO
 
 import com.zerobase.zbcharger.domain.charger.dao.ChargerRepository;
 import com.zerobase.zbcharger.domain.charger.dao.StationRepository;
-import com.zerobase.zbcharger.domain.charger.dto.AddChargerRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.AddChargerRequest;
 import com.zerobase.zbcharger.domain.charger.dto.ChargerInfo;
-import com.zerobase.zbcharger.domain.charger.dto.UpdateChargerRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.ChargerResponse;
+import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateChargerRequest;
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
 import com.zerobase.zbcharger.exception.CustomException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,31 +22,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ChargerAdminService {
+public class ChargerService {
 
     private final ChargerRepository chargerRepository;
     private final StationRepository stationRepository;
 
     @Transactional
     public String addCharger(AddChargerRequest request) {
-        Charger charger = chargerRepository.findById(request.id()).orElse(null);
+        Charger charger = getChargerOrNull(request.id());
 
         throwIfChargerExists(charger);
         throwIfStationNotExists(request.stationId());
 
-        if (charger == null) {
-            charger = request.toEntity();
-            chargerRepository.save(charger);
-        } else {
-            charger.restore();
-        }
-
-        return charger.getId();
+        return addOrRestoreCharger(request, charger).getId();
     }
 
     @Transactional(readOnly = true)
-    public Page<ChargerInfo> getChargerList(Pageable pageable) {
-        return chargerRepository.findAll(pageable).map(ChargerInfo::fromEntity);
+    public Page<ChargerResponse> getChargerList(Pageable pageable) {
+        return chargerRepository.findAll(pageable).map(ChargerResponse::fromEntity);
     }
 
     @Transactional
@@ -72,7 +67,6 @@ public class ChargerAdminService {
         }
     }
 
-
     private void throwIfChargerDeleted(Charger charger) {
         if (charger.isDeletedYn()) {
             throw new CustomException(CHARGER_ALREADY_DELETED);
@@ -86,7 +80,21 @@ public class ChargerAdminService {
     }
 
     private Charger getChargerOrThrow(String id) {
-        return chargerRepository.findById(id)
+        return Optional.ofNullable(getChargerOrNull(id))
             .orElseThrow(() -> new CustomException(CHARGER_NOT_FOUND));
+    }
+
+    private Charger getChargerOrNull(String id) {
+        return chargerRepository.findById(id).orElse(null);
+    }
+
+    private Charger addOrRestoreCharger(AddChargerRequest request, Charger charger) {
+        if (charger == null) {
+            charger = request.toEntity();
+            chargerRepository.save(charger);
+        } else {
+            charger.restore();
+        }
+        return charger;
     }
 }

@@ -251,22 +251,4 @@ public class ChargerInfo {
             .deleteDetail(deleteDetail)
             .build();
     }
-
-    public static ChargerInfo fromEntity(Charger charger) {
-        return ChargerInfo.builder()
-            .chargerId(charger.getId())
-            .stationId(charger.getStationId())
-            .chargerType(charger.getChargerType())
-            .location(charger.getLocation())
-            .stat(charger.getStat())
-            .output(charger.getOutput())
-            .method(charger.getMethod())
-            .statUpdatedAt(charger.getStatUpdatedAt())
-            .lastChargeStartedAt(charger.getLastChargeStartedAt())
-            .lastChargeEndedAt(charger.getLastChargeFinishedAt())
-            .nowChargeStartedAt(charger.getNowChargeStartedAt())
-            .deletedYn(charger.isDeletedYn())
-            .deleteDetail(charger.getDeleteDetail())
-            .build();
-    }
 }

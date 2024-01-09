@@ -1,10 +1,10 @@
-package com.zerobase.zbcharger.domain.charger.controller;
+package com.zerobase.zbcharger.domain.charger.controller.admin;
 
 import com.zerobase.zbcharger.configuration.security.annotation.RoleAdmin;
-import com.zerobase.zbcharger.domain.charger.dto.AddChargerRequest;
-import com.zerobase.zbcharger.domain.charger.dto.ChargerInfo;
-import com.zerobase.zbcharger.domain.charger.dto.UpdateChargerRequest;
-import com.zerobase.zbcharger.domain.charger.service.ChargerAdminService;
+import com.zerobase.zbcharger.domain.charger.dto.admin.AddChargerRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.ChargerResponse;
+import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateChargerRequest;
+import com.zerobase.zbcharger.domain.charger.service.admin.ChargerService;
 import com.zerobase.zbcharger.util.ResponseEntityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,29 +26,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/chargers")
 @RequiredArgsConstructor
-public class ChargerAdminController {
+public class ChargerController {
 
-    private final ChargerAdminService chargerAdminService;
+    private final ChargerService chargerService;
 
     @PostMapping
     public ResponseEntity<Void> addCharger(@Valid @RequestBody AddChargerRequest request) {
-        return ResponseEntityUtils.created(chargerAdminService.addCharger(request));
+        return ResponseEntityUtils.created(chargerService.addCharger(request));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ChargerInfo>> getChargerList(
+    public ResponseEntity<Page<ChargerResponse>> getChargerList(
         @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(chargerAdminService.getChargerList(pageable));
+        return ResponseEntity.ok(chargerService.getChargerList(pageable));
     }
 
     @DeleteMapping("{id}")
     public void deleteCharger(@PathVariable String id) {
-        chargerAdminService.deleteCharger(id);
+        chargerService.deleteCharger(id);
     }
 
     @PatchMapping("{id}")
     public void updateCharger(@PathVariable String id,
         @Valid @RequestBody UpdateChargerRequest request) {
-        chargerAdminService.updateCharger(id, request);
+        chargerService.updateCharger(id, request);
     }
 }
