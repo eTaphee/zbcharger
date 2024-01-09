@@ -5,7 +5,7 @@ logging.level:
 
 spring:
   profiles:
-    include: email, datagokr
+    include: email, datagokr, payment
 
   datasource:
     url: jdbc:mariadb://localhost/zbcharger?characterEncoding=utf8&serverTimezone=asia/seoul
@@ -18,7 +18,7 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        #        show_sql: true
+        show_sql: true
         format_sql: true
         # batch 정렬 옵션
         order_inserts: true

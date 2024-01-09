@@ -30,6 +30,8 @@ public enum ErrorCode {
     ONLY_PHYSICAL_CARD_COULD_REGISTER(BAD_REQUEST, "물리 카드만 등록할 수 있습니다."),
     ACCESS_DENIED(FORBIDDEN, "접근 권한이 없습니다."),
 
+    PAYMENT_METHOD_NOT_FOUND(NOT_FOUND, "결제 수단을 찾을 수 없습니다."),
+
     EMAIL_ALREADY_EXISTS(CONFLICT, "중복되는 메일이 존재합니다."),
 
     EMAIL_VERIFICATION_NOT_FOUND(NOT_FOUND, "이메일 인증 정보를 찾을 수 없습니다."),
@@ -39,6 +41,7 @@ public enum ErrorCode {
     EMAIL_VERIFICATION_RESEND_TIME_EXCEED(BAD_REQUEST, "인증 메일 재전송 가능시간을 초과했습니다. 잠시후 다시 시도하세요."),
     ARGUMENT_NOT_VALID(BAD_REQUEST, "잘못된 입력입니다."),
 
+    REGISTER_PAYMENT_FAILED(INTERNAL_SERVER_ERROR, "결제 수단 등록에 실패했습니다."),
     UNHANDLED_ERROR(INTERNAL_SERVER_ERROR, "정의되지 않은 에러 발생");
 
     /**
