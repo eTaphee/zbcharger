@@ -2,7 +2,7 @@ package com.zerobase.zbcharger.domain.charger.controller.admin;
 
 import com.zerobase.zbcharger.configuration.security.annotation.RoleAdmin;
 import com.zerobase.zbcharger.domain.charger.dto.admin.AddStationRequest;
-import com.zerobase.zbcharger.domain.charger.dto.StationInfo;
+import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.StationResponse;
 import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateStationRequest;
 import com.zerobase.zbcharger.domain.charger.service.admin.StationService;
@@ -38,8 +38,9 @@ public class StationController {
 
     @GetMapping
     public ResponseEntity<Page<StationResponse>> getStationList(
-        @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(stationService.getStationList(pageable));
+        @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable,
+        SearchStationRequest request) {
+        return ResponseEntity.ok(stationService.getStationList(pageable, request));
     }
 
     @DeleteMapping("{id}")

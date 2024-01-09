@@ -8,6 +8,7 @@ import static com.zerobase.zbcharger.exception.constant.ErrorCode.STATION_NOT_FO
 import com.zerobase.zbcharger.domain.charger.dao.CompanyRepository;
 import com.zerobase.zbcharger.domain.charger.dao.StationRepository;
 import com.zerobase.zbcharger.domain.charger.dto.admin.AddStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.StationResponse;
 import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateStationRequest;
 import com.zerobase.zbcharger.domain.charger.entity.Station;
@@ -49,11 +50,12 @@ public class StationService {
      * 충전소 목록 조회
      *
      * @param pageable 페이징 정보
+     * @param request
      * @return 충전소 목록
      */
     @Transactional(readOnly = true)
-    public Page<StationResponse> getStationList(Pageable pageable) {
-        return stationRepository.findAll(pageable).map(StationResponse::fromEntity);
+    public Page<StationResponse> getStationList(Pageable pageable, SearchStationRequest request) {
+        return stationRepository.findAll(pageable, request).map(StationResponse::fromEntity);
     }
 
     /**

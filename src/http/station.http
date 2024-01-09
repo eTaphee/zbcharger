@@ -43,5 +43,5 @@ DELETE {{host}}/admin/stations/ACAC0001
 Authorization: Bearer {{accessToken}}
 
 ### 충전소 조회
-GET {{host}}/admin/stations
+GET {{host}}/admin/stations?deletedYn=true
 Authorization: Bearer {{accessToken}}
