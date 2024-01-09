@@ -1,4 +1,4 @@
-package com.zerobase.zbcharger.domain.charger.dto;
+package com.zerobase.zbcharger.domain.charger.dto.admin;
 
 import com.zerobase.zbcharger.domain.charger.entity.Station;
 import jakarta.validation.constraints.NotBlank;

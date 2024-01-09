@@ -1,4 +1,4 @@
-package com.zerobase.zbcharger.domain.charger.service;
+package com.zerobase.zbcharger.domain.charger.service.admin;
 
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.COMPANY_NOT_FOUND;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.STATION_ALREADY_DELETED;
@@ -7,11 +7,12 @@ import static com.zerobase.zbcharger.exception.constant.ErrorCode.STATION_NOT_FO
 
 import com.zerobase.zbcharger.domain.charger.dao.CompanyRepository;
 import com.zerobase.zbcharger.domain.charger.dao.StationRepository;
-import com.zerobase.zbcharger.domain.charger.dto.AddStationRequest;
-import com.zerobase.zbcharger.domain.charger.dto.StationInfo;
-import com.zerobase.zbcharger.domain.charger.dto.UpdateStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.AddStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.StationResponse;
+import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateStationRequest;
 import com.zerobase.zbcharger.domain.charger.entity.Station;
 import com.zerobase.zbcharger.exception.CustomException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-public class StationAdminService {
+public class StationService {
 
     private final StationRepository stationRepository;
     private final CompanyRepository companyRepository;
@@ -36,19 +37,12 @@ public class StationAdminService {
      */
     @Transactional
     public String addStation(AddStationRequest request) {
-        Station station = stationRepository.findById(request.id()).orElse(null);
+        Station station = getStationOrNull(request.id());
 
         throwIfStationExists(station);
         throwIfCompanyNotExists(request.companyId());
 
-        if (station == null) {
-            station = request.toEntity();
-            stationRepository.save(station);
-        } else {
-            station.restore();
-        }
-
-        return station.getId();
+        return addOrRestoreStation(request, station).getId();
     }
 
     /**
@@ -58,8 +52,8 @@ public class StationAdminService {
      * @return 충전소 목록
      */
     @Transactional(readOnly = true)
-    public Page<StationInfo> getStationList(Pageable pageable) {
-        return stationRepository.findAll(pageable).map(StationInfo::fromEntity);
+    public Page<StationResponse> getStationList(Pageable pageable) {
+        return stationRepository.findAll(pageable).map(StationResponse::fromEntity);
     }
 
     /**
@@ -94,13 +88,11 @@ public class StationAdminService {
         station.delete();
     }
 
-
     private void throwIfStationExists(Station station) {
         if (station != null && !station.isDeleted()) {
             throw new CustomException(STATION_ALREADY_EXISTS);
         }
     }
-
 
     private void throwIfStationDeleted(Station station) {
         if (station.isDeleted()) {
@@ -115,7 +107,22 @@ public class StationAdminService {
     }
 
     private Station getStationOrThrow(String id) {
-        return stationRepository.findById(id)
+        return Optional.ofNullable(getStationOrNull(id))
             .orElseThrow(() -> new CustomException(STATION_NOT_FOUND));
+    }
+
+    private Station getStationOrNull(String id) {
+        return stationRepository.findById(id).orElse(null);
+    }
+
+    private Station addOrRestoreStation(AddStationRequest request, Station station) {
+        if (station == null) {
+            station = request.toEntity();
+            stationRepository.save(station);
+        } else {
+            station.restore();
+        }
+
+        return station;
     }
 }

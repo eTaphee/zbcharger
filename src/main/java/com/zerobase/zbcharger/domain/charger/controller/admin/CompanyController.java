@@ -28,27 +28,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CompanyController {
 
-    private final CompanyService companyAdminService;
+    private final CompanyService companyService;
 
     @PostMapping
     public ResponseEntity<Void> addCompany(@Valid @RequestBody AddCompanyRequest request) {
-        return ResponseEntityUtils.created(companyAdminService.addCompany(request));
+        return ResponseEntityUtils.created(companyService.addCompany(request));
     }
 
     @GetMapping
     public ResponseEntity<Page<CompanyResponse>> getCompanyList(
         @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(companyAdminService.getCompanyList(pageable));
+        return ResponseEntity.ok(companyService.getCompanyList(pageable));
     }
 
     @DeleteMapping("{id}")
     public void deleteCompany(@PathVariable String id) {
-        companyAdminService.deleteCompany(id);
+        companyService.deleteCompany(id);
     }
 
     @PatchMapping("{id}")
     public void updateCompany(@PathVariable String id,
         @Valid @RequestBody UpdateCompanyRequest request) {
-        companyAdminService.updateCompany(id, request);
+        companyService.updateCompany(id, request);
     }
 }

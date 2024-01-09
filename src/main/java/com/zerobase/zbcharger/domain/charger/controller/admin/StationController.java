@@ -1,10 +1,11 @@
-package com.zerobase.zbcharger.domain.charger.controller;
+package com.zerobase.zbcharger.domain.charger.controller.admin;
 
 import com.zerobase.zbcharger.configuration.security.annotation.RoleAdmin;
-import com.zerobase.zbcharger.domain.charger.dto.AddStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.admin.AddStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.StationInfo;
-import com.zerobase.zbcharger.domain.charger.dto.UpdateStationRequest;
-import com.zerobase.zbcharger.domain.charger.service.StationAdminService;
+import com.zerobase.zbcharger.domain.charger.dto.admin.StationResponse;
+import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateStationRequest;
+import com.zerobase.zbcharger.domain.charger.service.admin.StationService;
 import com.zerobase.zbcharger.util.ResponseEntityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,29 +27,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/stations")
 @RequiredArgsConstructor
-public class StationAdminController {
+public class StationController {
 
-    private final StationAdminService stationAdminService;
+    private final StationService stationService;
 
     @PostMapping
     public ResponseEntity<Void> addStation(@Valid @RequestBody AddStationRequest request) {
-        return ResponseEntityUtils.created(stationAdminService.addStation(request));
+        return ResponseEntityUtils.created(stationService.addStation(request));
     }
 
     @GetMapping
-    public ResponseEntity<Page<StationInfo>> getStationList(
+    public ResponseEntity<Page<StationResponse>> getStationList(
         @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(stationAdminService.getStationList(pageable));
+        return ResponseEntity.ok(stationService.getStationList(pageable));
     }
 
     @DeleteMapping("{id}")
     public void deleteStation(@PathVariable String id) {
-        stationAdminService.deleteStation(id);
+        stationService.deleteStation(id);
     }
 
     @PatchMapping("{id}")
     public void updateStation(@PathVariable String id,
         @Valid @RequestBody UpdateStationRequest request) {
-        stationAdminService.updateStation(id, request);
+        stationService.updateStation(id, request);
     }
 }
