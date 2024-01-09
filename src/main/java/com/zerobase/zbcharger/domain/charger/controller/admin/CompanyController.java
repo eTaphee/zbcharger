@@ -3,6 +3,7 @@ package com.zerobase.zbcharger.domain.charger.controller.admin;
 import com.zerobase.zbcharger.configuration.security.annotation.RoleAdmin;
 import com.zerobase.zbcharger.domain.charger.dto.admin.AddCompanyRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.CompanyResponse;
+import com.zerobase.zbcharger.domain.charger.dto.admin.SearchCompanyRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateCompanyRequest;
 import com.zerobase.zbcharger.domain.charger.service.admin.CompanyService;
 import com.zerobase.zbcharger.util.ResponseEntityUtils;
@@ -37,8 +38,9 @@ public class CompanyController {
 
     @GetMapping
     public ResponseEntity<Page<CompanyResponse>> getCompanyList(
-        @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(companyService.getCompanyList(pageable));
+        @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable,
+        SearchCompanyRequest request) {
+        return ResponseEntity.ok(companyService.getCompanyList(pageable, request));
     }
 
     @DeleteMapping("{id}")

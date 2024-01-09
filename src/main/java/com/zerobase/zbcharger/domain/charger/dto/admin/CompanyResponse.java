@@ -10,8 +10,10 @@ public record CompanyResponse(
     String name,
     String tel,
     String operator,
+    boolean deletedYn,
     LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    LocalDateTime updatedAt,
+    LocalDateTime deletedAt
 ) {
 
     public static CompanyResponse fromEntity(Company company) {
@@ -19,9 +21,11 @@ public record CompanyResponse(
             .id(company.getId())
             .name(company.getName())
             .tel(company.getTel())
+            .deletedYn(company.isDeleted())
             .operator(company.getOperator())
             .createdAt(company.getCreatedAt())
             .updatedAt(company.getUpdatedAt())
+            .deletedAt(company.getDeletedAt())
             .build();
     }
 }

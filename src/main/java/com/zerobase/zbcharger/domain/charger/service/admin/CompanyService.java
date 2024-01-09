@@ -7,6 +7,7 @@ import static com.zerobase.zbcharger.exception.constant.ErrorCode.COMPANY_NOT_FO
 import com.zerobase.zbcharger.domain.charger.dao.CompanyRepository;
 import com.zerobase.zbcharger.domain.charger.dto.admin.AddCompanyRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.CompanyResponse;
+import com.zerobase.zbcharger.domain.charger.dto.admin.SearchCompanyRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateCompanyRequest;
 import com.zerobase.zbcharger.domain.charger.entity.Company;
 import com.zerobase.zbcharger.exception.CustomException;
@@ -74,12 +75,13 @@ public class CompanyService {
     /**
      * 회사 목록 조회
      *
-     * @param pageable 페이징 정보
+     * @param pageable  페이징 정보
+     * @param deletedYn
      * @return 회사 목록
      */
     @Transactional(readOnly = true)
-    public Page<CompanyResponse> getCompanyList(Pageable pageable) {
-        return companyRepository.findAll(pageable).map(CompanyResponse::fromEntity);
+    public Page<CompanyResponse> getCompanyList(Pageable pageable, SearchCompanyRequest request) {
+        return companyRepository.findAll(pageable, request).map(CompanyResponse::fromEntity);
     }
 
     private void throwIfCompanyExists(Company company) {

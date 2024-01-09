@@ -26,5 +26,5 @@ DELETE {{host}}/admin/companies/ZB
 Authorization: Bearer {{accessToken}}
 
 ### 회사 조회
-GET {{host}}/admin/companies
+GET {{host}}/admin/companies?page=0&size=10&sort=name,desc
 Authorization: Bearer {{accessToken}}
