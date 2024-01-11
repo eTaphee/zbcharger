@@ -1,14 +1,18 @@
 package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringChargerTypeDeserializer;
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
 import com.zerobase.zbcharger.domain.charger.type.AreaCode;
 import com.zerobase.zbcharger.domain.charger.type.AreaDetailCode;
 import com.zerobase.zbcharger.domain.charger.type.ChargeMethod;
 import com.zerobase.zbcharger.domain.charger.type.ChargerStat;
+import com.zerobase.zbcharger.domain.charger.type.ChargerType;
 import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
 import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -48,7 +52,8 @@ public class ChargerInfo {
      * 충전기 타입
      */
     @JsonProperty("chgerType")
-    private final String chargerType;
+    @JsonDeserialize(using = StringChargerTypeDeserializer.class)
+    private final Set<ChargerType> chargerType;
 
     /**
      * 주소
@@ -238,7 +243,7 @@ public class ChargerInfo {
         return Charger.builder()
             .id(stationId + chargerId)
             .stationId(stationId)
-//            .chargerType(chargerType)
+            .chargerType(chargerType)
             .stat(stat)
             .output(output)
             .method(method)

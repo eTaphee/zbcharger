@@ -1,7 +1,16 @@
 package com.zerobase.zbcharger.domain.charger.entity;
 
+import com.zerobase.zbcharger.domain.charger.entity.converter.AreaCodeConverter;
+import com.zerobase.zbcharger.domain.charger.entity.converter.AreaDetailCodeConverter;
+import com.zerobase.zbcharger.domain.charger.entity.converter.StationKindCodeConverter;
+import com.zerobase.zbcharger.domain.charger.entity.converter.StationKindDetailCodeConverter;
+import com.zerobase.zbcharger.domain.charger.type.AreaCode;
+import com.zerobase.zbcharger.domain.charger.type.AreaDetailCode;
+import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
+import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import com.zerobase.zbcharger.domain.common.entity.AuditableEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
@@ -50,6 +59,11 @@ public class Station extends AuditableEntity implements Persistable<String> {
     private String address;
 
     /**
+     * 위치
+     */
+    private String location;
+
+    /**
      * 이용 가능시간
      */
     private String useTime;
@@ -58,25 +72,29 @@ public class Station extends AuditableEntity implements Persistable<String> {
      * 지역 코드
      */
     @Column(columnDefinition = "char(2)")
-    private String areaCode;
+    @Convert(converter = AreaCodeConverter.class)
+    private AreaCode areaCode;
 
     /**
      * 지역구분 상세 코드
      */
     @Column(columnDefinition = "char(5)")
-    private String areaDetailCode;
+    @Convert(converter = AreaDetailCodeConverter.class)
+    private AreaDetailCode areaDetailCode;
 
     /**
      * 충전소 구분 코드
      */
     @Column(columnDefinition = "char(2)")
-    private String stationKindCode;
+    @Convert(converter = StationKindCodeConverter.class)
+    private StationKindCode stationKindCode;
 
     /**
      * 충전소 구분 상세 코드
      */
     @Column(columnDefinition = "char(4)")
-    private String stationKindDetailCode;
+    @Convert(converter = StationKindDetailCodeConverter.class)
+    private StationKindDetailCode stationKindDetailCode;
 
     /**
      * 주차료 무료
@@ -150,7 +168,6 @@ public class Station extends AuditableEntity implements Persistable<String> {
         this.deletedAt = null;
     }
 
-
     public void update(String name, String address, String useTime, String areaCode,
         String areaDetailCode, String stationKindCode, String stationKindDetailCode,
         boolean parkingFreeYn, String note, boolean useLimitYn, String useLimitDetail,
@@ -158,10 +175,10 @@ public class Station extends AuditableEntity implements Persistable<String> {
         this.name = name;
         this.address = address;
         this.useTime = useTime;
-        this.areaCode = areaCode;
-        this.areaDetailCode = areaDetailCode;
-        this.stationKindCode = stationKindCode;
-        this.stationKindDetailCode = stationKindDetailCode;
+//        this.areaCode = areaCode;
+//        this.areaDetailCode = areaDetailCode;
+//        this.stationKind = stationKindCode;
+//        this.stationKindDetailCode = stationKindDetailCode;
         this.parkingFreeYn = parkingFreeYn;
         this.note = note;
         this.useLimitYn = useLimitYn;

@@ -1,11 +1,19 @@
 package com.zerobase.zbcharger.domain.charger.entity;
 
+import com.zerobase.zbcharger.domain.charger.entity.converter.ChargeMethodConverter;
+import com.zerobase.zbcharger.domain.charger.entity.converter.ChargerStatConverter;
+import com.zerobase.zbcharger.domain.charger.entity.converter.ChargerTypeConverter;
+import com.zerobase.zbcharger.domain.charger.type.ChargeMethod;
+import com.zerobase.zbcharger.domain.charger.type.ChargerStat;
+import com.zerobase.zbcharger.domain.charger.type.ChargerType;
 import com.zerobase.zbcharger.domain.common.entity.AuditableEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,28 +49,27 @@ public class Charger extends AuditableEntity implements Persistable<String> {
     /**
      * 충전기 타입
      */
-    @Column(columnDefinition = "char(2)")
-    private String chargerType;
-
-    /**
-     * 위치
-     */
-    private String location;
+    @Convert(converter = ChargerTypeConverter.class)
+    private Set<ChargerType> chargerType;
 
     /**
      * 상태
      */
-    private int stat;
+    @Column(columnDefinition = "char(1)")
+    @Convert(converter = ChargerStatConverter.class)
+    private ChargerStat stat;
 
     /**
      * 충전 용량
      */
-    private String output;
+    private Integer output;
 
     /**
      * 충전 방식
      */
-    private String method;
+    @Column(columnDefinition = "char(1)")
+    @Convert(converter = ChargeMethodConverter.class)
+    private ChargeMethod method;
 
     /**
      * 상태 갱신 일시
@@ -120,10 +127,10 @@ public class Charger extends AuditableEntity implements Persistable<String> {
         this.deletedYn = false;
     }
 
-    public void update(String chargerType, String location, String output, String method) {
-        this.chargerType = chargerType;
-        this.location = location;
-        this.output = output;
-        this.method = method;
+    public void update(String chargerType, String location, int output, String method) {
+//        this.chargerType = chargerType;
+//        this.location = location;
+//        this.output = output;
+//        this.method = method;
     }
 }
