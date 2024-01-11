@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ChargeMethod implements EnumCode {
+public enum ChargeMethod implements EnumCode<String> {
     SINGLE("S", "단독"),
     MULTI("M", "동시");
 

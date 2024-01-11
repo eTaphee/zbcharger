@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum AreaDetailCode implements EnumCode {
+public enum AreaDetailCode implements EnumCode<String> {
     Z11110("11110", "종로구"),
     Z11140("11140", "중구"),
     Z11170("11170", "용산구"),

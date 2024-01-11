@@ -4,7 +4,7 @@ import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
 import com.zerobase.zbcharger.domain.common.deserializer.AbstractEnumCodeDeserializer;
 
 public class StringStationKindCodeDeserializer extends
-    AbstractEnumCodeDeserializer<StationKindCode> {
+    AbstractEnumCodeDeserializer<String, StationKindCode> {
 
     public StringStationKindCodeDeserializer() {
         super(StationKindCode.class, null);

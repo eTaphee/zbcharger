@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum AreaCode implements EnumCode {
+public enum AreaCode implements EnumCode<String> {
     Z11("11", "서울특별시"),
     Z26("26", "부산광역시"),
     Z27("27", "대구광역시"),

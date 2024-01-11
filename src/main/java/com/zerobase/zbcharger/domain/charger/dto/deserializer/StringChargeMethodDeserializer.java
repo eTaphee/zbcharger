@@ -7,7 +7,8 @@ import com.zerobase.zbcharger.domain.common.deserializer.AbstractEnumCodeDeseria
 import com.zerobase.zbcharger.util.EnumCodeUtils;
 import java.io.IOException;
 
-public class StringChargeMethodDeserializer extends AbstractEnumCodeDeserializer<ChargeMethod> {
+public class StringChargeMethodDeserializer extends
+    AbstractEnumCodeDeserializer<String, ChargeMethod> {
 
     public StringChargeMethodDeserializer() {
         super(ChargeMethod.class, null);

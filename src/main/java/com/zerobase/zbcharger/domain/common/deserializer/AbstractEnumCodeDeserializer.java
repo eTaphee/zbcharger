@@ -3,13 +3,14 @@ package com.zerobase.zbcharger.domain.common.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.type.TypeParser;
 import com.zerobase.zbcharger.domain.common.type.EnumCode;
 import com.zerobase.zbcharger.util.EnumCodeUtils;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class AbstractEnumCodeDeserializer<T extends Enum<T> & EnumCode> extends
+public abstract class AbstractEnumCodeDeserializer<C, T extends Enum<T> & EnumCode<C>> extends
     JsonDeserializer<T> {
 
     private final Class<T> enumType;

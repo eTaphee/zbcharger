@@ -40,7 +40,7 @@ public class DataGoKrApiConfiguration {
     @Value("${data-go-kr.baseurl}")
     private String baseUrl;
 
-    private final ObjectMapper objectMapper = objectMapper();
+    private final ObjectMapper objectMapper = webClientMapper();
 
     @Bean
     public DataGoKrApi dataGoKrApi() {
@@ -65,7 +65,8 @@ public class DataGoKrApiConfiguration {
     /**
      * data.go.kr 응답을 처리하기 위한 objectMapper
      */
-    private ObjectMapper objectMapper() {
+    @Bean
+    public ObjectMapper webClientMapper() {
         SimpleModule module = new SimpleModule();
         module.addDeserializer(String.class, new StringDeserializer());
         module.addDeserializer(AreaCode.class, new StringAreaCodeDeserializer());
@@ -75,7 +76,8 @@ public class DataGoKrApiConfiguration {
         module.addDeserializer(ChargerStat.class, new StringChargerStatDeserializer());
         module.addDeserializer(LocalDateTime.class, new StringLocalDateTimeDeserializer());
         module.addDeserializer(StationKindCode.class, new StringStationKindCodeDeserializer());
-        module.addDeserializer(StationKindDetailCode.class, new StringStationKindDetailCodeDeserializer());
+        module.addDeserializer(StationKindDetailCode.class,
+            new StringStationKindDetailCodeDeserializer());
 
         return new ObjectMapper()
             .registerModule(module)

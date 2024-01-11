@@ -5,15 +5,15 @@ import java.util.EnumSet;
 
 public final class EnumCodeUtils {
 
-    public static <T extends Enum<T> & EnumCode> T valueOf(Class<T> enumType, String value) {
+    public static <C, T extends Enum<T> & EnumCode<C>> T valueOf(Class<T> enumType, String value) {
         return EnumSet.allOf(enumType)
             .stream()
-            .filter(v -> v.getValue().equals(value))
+            .filter(v -> v.getValue().toString().equals(value))
             .findFirst()
             .orElse(null);
     }
 
-    public static <T extends Enum<T> & EnumCode> T descriptionOf(Class<T> enumType,
+    public static <C, T extends Enum<T> & EnumCode<C>> T descriptionOf(Class<T> enumType,
         String description) {
         return EnumSet.allOf(enumType)
             .stream()

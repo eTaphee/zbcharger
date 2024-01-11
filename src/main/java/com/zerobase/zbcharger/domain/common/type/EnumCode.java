@@ -1,8 +1,8 @@
 package com.zerobase.zbcharger.domain.common.type;
 
-public interface EnumCode {
+public interface EnumCode<T> {
 
-    String getValue();
+    T getValue();
 
     String getDescription();
 }

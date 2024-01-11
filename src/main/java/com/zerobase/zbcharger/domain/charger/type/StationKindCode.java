@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum StationKindCode implements EnumCode {
+public enum StationKindCode implements EnumCode<String> {
 
     A0("A0", "공공시설"),
     B0("B0", "주차시설"),

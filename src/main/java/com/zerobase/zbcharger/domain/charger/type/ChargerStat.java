@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ChargerStat implements EnumCode {
+public enum ChargerStat implements EnumCode<String> {
     UNKNOWN("0", "알수없음"),
     ERROR("1", "통신이상"),
     AVAILABLE("2", "충전대기"),
