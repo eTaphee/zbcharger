@@ -2,20 +2,31 @@ package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringBooleanDeserializer;
-import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringLocalDateTimeDeserializer;
+import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringChargerTypeDeserializer;
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
+import com.zerobase.zbcharger.domain.charger.type.AreaCode;
+import com.zerobase.zbcharger.domain.charger.type.AreaDetailCode;
+import com.zerobase.zbcharger.domain.charger.type.ChargeMethod;
+import com.zerobase.zbcharger.domain.charger.type.ChargerStat;
+import com.zerobase.zbcharger.domain.charger.type.ChargerType;
+import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
+import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 /**
  * 충전기 정보
  */
+@EqualsAndHashCode(of = {"stationId", "chargerId"})
 @Getter
 @Builder
+@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChargerInfo {
 
@@ -41,7 +52,8 @@ public class ChargerInfo {
      * 충전기 타입
      */
     @JsonProperty("chgerType")
-    private final String chargerType;
+    @JsonDeserialize(using = StringChargerTypeDeserializer.class)
+    private final Set<ChargerType> chargerType;
 
     /**
      * 주소
@@ -98,75 +110,70 @@ public class ChargerInfo {
     /**
      * 충전기 상태
      */
-    private final int stat;
+    private final ChargerStat stat;
 
     /**
      * 상태 갱신 일시
      */
     @JsonProperty("statUpdDt")
-    @JsonDeserialize(using = StringLocalDateTimeDeserializer.class)
     private final LocalDateTime statUpdatedAt;
 
     /**
      * 마지막 충전 시작 일시
      */
     @JsonProperty("lastTsdt")
-    @JsonDeserialize(using = StringLocalDateTimeDeserializer.class)
     private final LocalDateTime lastChargeStartedAt;
 
     /**
      * 마지막 충전 종료 일시
      */
     @JsonProperty("lastTedt")
-    @JsonDeserialize(using = StringLocalDateTimeDeserializer.class)
     private final LocalDateTime lastChargeEndedAt;
 
     /**
      * 충전중 시작 일시
      */
     @JsonProperty("nowTsdt")
-    @JsonDeserialize(using = StringLocalDateTimeDeserializer.class)
     private final LocalDateTime nowChargeStartedAt;
 
     /**
      * 충전 용량
      */
-    private final String output;
+    private final Integer output;
 
     /**
      * 충전 방식
      */
-    private final String method;
+    private final ChargeMethod method;
 
     /**
      * 지역 코드
      */
     @JsonProperty("zcode")
-    private final String areaCode;
+    private final AreaCode areaCode;
 
     /**
      * 지역 구분 상세코드
      */
     @JsonProperty("zscode")
-    private final String areaDetailCode;
+    private final AreaDetailCode areaDetailCode;
 
     /**
      * 충전소 구분 코드
      */
     @JsonProperty("kind")
-    private final String stationKindCode;
+    private final StationKindCode stationKindCode;
 
     /**
      * 충전소 구분 상세코드
      */
     @JsonProperty("kindDetail")
-    private final String stationKindDetailCode;
+    private final StationKindDetailCode stationKindDetailCode;
 
     /**
      * 주차료 무료 여부
      */
     @JsonProperty("parkingFree")
-    @JsonDeserialize(using = StringBooleanDeserializer.class)
     private final boolean parkingFreeYn;
 
     /**
@@ -177,7 +184,6 @@ public class ChargerInfo {
     /**
      * 이용자 제한
      */
-    @JsonDeserialize(using = StringBooleanDeserializer.class)
     private final boolean limitYn;
 
     /**
@@ -189,7 +195,6 @@ public class ChargerInfo {
      * 삭제 여부
      */
     @JsonProperty("delYn")
-    @JsonDeserialize(using = StringBooleanDeserializer.class)
     private final boolean deletedYn;
 
     /**
@@ -201,7 +206,6 @@ public class ChargerInfo {
     /**
      * 편의 제공 여부
      */
-    @JsonDeserialize(using = StringBooleanDeserializer.class)
     private final boolean trafficYn;
 
     public CompanyInfo getCompany() {
@@ -219,6 +223,7 @@ public class ChargerInfo {
             .companyId(companyId)
             .name(stationName)
             .address(address)
+            .location(location)
             .useTime(useTime)
             .areaCode(areaCode)
             .areaDetailCode(areaDetailCode)
@@ -239,7 +244,6 @@ public class ChargerInfo {
             .id(stationId + chargerId)
             .stationId(stationId)
             .chargerType(chargerType)
-            .location(location)
             .stat(stat)
             .output(output)
             .method(method)

@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 /**
  * 충전기 정보 응답
  */
 @Getter
+@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChargerInfoResponse {
 

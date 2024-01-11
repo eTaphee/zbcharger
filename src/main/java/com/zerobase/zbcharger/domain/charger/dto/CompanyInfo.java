@@ -3,12 +3,14 @@ package com.zerobase.zbcharger.domain.charger.dto;
 import com.zerobase.zbcharger.domain.charger.entity.Company;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
  * 회사 정보
  */
+@EqualsAndHashCode(of = "id")
 @Getter
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

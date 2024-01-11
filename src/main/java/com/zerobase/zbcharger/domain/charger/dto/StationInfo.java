@@ -1,14 +1,20 @@
 package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.zerobase.zbcharger.domain.charger.entity.Station;
+import com.zerobase.zbcharger.domain.charger.type.AreaCode;
+import com.zerobase.zbcharger.domain.charger.type.AreaDetailCode;
+import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
+import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
  * 충전소 정보
  */
+@EqualsAndHashCode(of = "id")
 @Getter
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -35,6 +41,11 @@ public class StationInfo {
     private final String address;
 
     /**
+     * 위치
+     */
+    private final String location;
+
+    /**
      * 이용 가능 시간
      */
     private final String useTime;
@@ -42,22 +53,22 @@ public class StationInfo {
     /**
      * 지역 코드
      */
-    private final String areaCode;
+    private final AreaCode areaCode;
 
     /**
      * 지역구분 상세 코드
      */
-    private final String areaDetailCode;
+    private final AreaDetailCode areaDetailCode;
 
     /**
      * 충전소 구분 코드
      */
-    private final String stationKindCode;
+    private final StationKindCode stationKindCode;
 
     /**
      * 충전소 구분 상세 코드
      */
-    private final String stationKindDetailCode;
+    private final StationKindDetailCode stationKindDetailCode;
 
     /**
      * 주차료 무료
@@ -100,6 +111,7 @@ public class StationInfo {
             .companyId(companyId)
             .name(name)
             .address(address)
+            .location(location)
             .useTime(useTime)
             .areaCode(areaCode)
             .areaDetailCode(areaDetailCode)
