@@ -1,4 +1,4 @@
-package com.zerobase.zbcharger.domain.charger.service.admin;
+package com.zerobase.zbcharger.domain.charger.service;
 
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.COMPANY_NOT_FOUND;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.STATION_ALREADY_DELETED;
@@ -11,12 +11,15 @@ import com.zerobase.zbcharger.domain.charger.dto.admin.AddStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.StationResponse;
 import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.client.SearchStationSummaryCondition;
+import com.zerobase.zbcharger.domain.charger.dto.client.StationSummary;
 import com.zerobase.zbcharger.domain.charger.entity.Station;
 import com.zerobase.zbcharger.exception.CustomException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,6 +91,19 @@ public class StationService {
         throwIfStationDeleted(station);
 
         station.delete();
+    }
+
+    /**
+     * 충전소 요약 목록 조회
+     *
+     * @param pageable  페이징 정보
+     * @param condition 검색 조건
+     * @return 충전소 요약 목록
+     */
+    @Transactional(readOnly = true)
+    public Slice<StationSummary> searchStationSummaryList(Pageable pageable,
+        SearchStationSummaryCondition condition) {
+        return stationRepository.findAllStationSummary(pageable, condition);
     }
 
     private void throwIfStationExists(Station station) {
