@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zerobase.zbcharger.domain.charger.type.ChargerType;
 import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,9 +44,13 @@ public record StationSummary(
 
     @JsonProperty("chargerTypes")
     public Set<ChargerType> getChargerTypes() {
-        return Arrays.stream(ChargerType.values())
+        EnumSet<ChargerType> set = EnumSet.noneOf(ChargerType.class);
+
+        Arrays.stream(ChargerType.values())
             .filter(m -> m.isFlagOfValue(chargerType))
-            .collect(Collectors.toUnmodifiableSet());
+            .forEach(set::add);
+
+        return Collections.unmodifiableSet(set);
     }
 
     public record Company(String id, String name) {

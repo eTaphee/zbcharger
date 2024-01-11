@@ -1,5 +1,6 @@
 package com.zerobase.zbcharger.domain.charger.type;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zerobase.zbcharger.domain.common.type.EnumCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

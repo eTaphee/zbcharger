@@ -16,6 +16,10 @@ public enum ChargerType implements EnumCode<Integer> {
     CHA(4, "차데모"),
     DC(8, "DC");
 
+    public String getKey() {
+        return name();
+    }
+
     private final Integer value;
     private final String description;
 
