@@ -2,20 +2,34 @@ package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringAreaCodeDeserializer;
+import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringAreaDetailCodeDeserializer;
 import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringBooleanDeserializer;
+import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringChargeMethodDeserializer;
 import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringLocalDateTimeDeserializer;
+import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringStationKindCodeDeserializer;
+import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringStationKindDetailCodeDeserializer;
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
+import com.zerobase.zbcharger.domain.charger.type.AreaCode;
+import com.zerobase.zbcharger.domain.charger.type.AreaDetailCode;
+import com.zerobase.zbcharger.domain.charger.type.ChargeMethod;
+import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
+import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 /**
  * 충전기 정보
  */
+@EqualsAndHashCode(of = {"stationId", "chargerId"})
 @Getter
 @Builder
+@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChargerInfo {
 
@@ -131,36 +145,41 @@ public class ChargerInfo {
     /**
      * 충전 용량
      */
-    private final String output;
+    private final Integer output;
 
     /**
      * 충전 방식
      */
-    private final String method;
+    @JsonDeserialize(using = StringChargeMethodDeserializer.class)
+    private final ChargeMethod method;
 
     /**
      * 지역 코드
      */
     @JsonProperty("zcode")
-    private final String areaCode;
+    @JsonDeserialize(using = StringAreaCodeDeserializer.class)
+    private final AreaCode areaCode;
 
     /**
      * 지역 구분 상세코드
      */
     @JsonProperty("zscode")
-    private final String areaDetailCode;
+    @JsonDeserialize(using = StringAreaDetailCodeDeserializer.class)
+    private final AreaDetailCode areaDetailCode;
 
     /**
      * 충전소 구분 코드
      */
     @JsonProperty("kind")
-    private final String stationKindCode;
+    @JsonDeserialize(using = StringStationKindCodeDeserializer.class)
+    private final StationKindCode stationKindCode;
 
     /**
      * 충전소 구분 상세코드
      */
     @JsonProperty("kindDetail")
-    private final String stationKindDetailCode;
+    @JsonDeserialize(using = StringStationKindDetailCodeDeserializer.class)
+    private final StationKindDetailCode stationKindDetailCode;
 
     /**
      * 주차료 무료 여부
@@ -219,16 +238,17 @@ public class ChargerInfo {
             .companyId(companyId)
             .name(stationName)
             .address(address)
+            .location(location)
             .useTime(useTime)
-            .areaCode(areaCode)
-            .areaDetailCode(areaDetailCode)
-            .stationKindCode(stationKindCode)
-            .stationKindDetailCode(stationKindDetailCode)
-            .parkingFreeYn(parkingFreeYn)
+//            .areaCode(areaCode)
+//            .areaDetailCode(areaDetailCode)
+//            .stationKindCode(stationKindCode)
+//            .stationKindDetailCode(stationKindDetailCode)
+//            .parkingFreeYn(parkingFreeYn)
             .note(note)
-            .limitYn(limitYn)
-            .limitDetail(limitDetail)
-            .trafficYn(trafficYn)
+//            .limitYn(limitYn)
+//            .limitDetail(limitDetail)
+//            .trafficYn(trafficYn)
             .latitude(latitude)
             .longitude(longitude)
             .build();
@@ -238,11 +258,10 @@ public class ChargerInfo {
         return Charger.builder()
             .id(stationId + chargerId)
             .stationId(stationId)
-            .chargerType(chargerType)
-            .location(location)
-            .stat(stat)
-            .output(output)
-            .method(method)
+//            .chargerType(chargerType)
+//            .stat(ChargerStat.fromValue(stat))
+//            .output(StringUtils.hasText(output) ? Integer.parseInt(output) : 0)
+//            .method(method)
             .statUpdatedAt(statUpdatedAt)
             .lastChargeStartedAt(lastChargeStartedAt)
             .lastChargeFinishedAt(lastChargeEndedAt)
