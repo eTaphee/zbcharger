@@ -65,7 +65,6 @@ public class DataGoKrApiConfiguration {
     /**
      * data.go.kr 응답을 처리하기 위한 objectMapper
      */
-    @Bean
     public ObjectMapper webClientMapper() {
         SimpleModule module = new SimpleModule();
         module.addDeserializer(String.class, new StringDeserializer());
