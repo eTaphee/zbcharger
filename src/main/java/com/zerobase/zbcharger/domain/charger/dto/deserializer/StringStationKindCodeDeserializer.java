@@ -1,18 +1,12 @@
 package com.zerobase.zbcharger.domain.charger.dto.deserializer;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
+import com.zerobase.zbcharger.domain.common.deserializer.AbstractEnumCodeDeserializer;
 
-public class StringStationKindCodeDeserializer extends JsonDeserializer<StationKindCode> {
+public class StringStationKindCodeDeserializer extends
+    AbstractEnumCodeDeserializer<StationKindCode> {
 
-    @Override
-    public StationKindCode deserialize(JsonParser parser, DeserializationContext ctxt) {
-        try {
-            return StationKindCode.valueOf(parser.getText());
-        } catch (Exception e) {
-            return null;
-        }
+    public StringStationKindCodeDeserializer() {
+        super(StationKindCode.class, null);
     }
 }

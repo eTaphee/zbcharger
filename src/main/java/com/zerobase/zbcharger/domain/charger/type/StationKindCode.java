@@ -1,11 +1,12 @@
 package com.zerobase.zbcharger.domain.charger.type;
 
+import com.zerobase.zbcharger.domain.common.type.EnumCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum StationKindCode {
+public enum StationKindCode implements EnumCode {
 
     A0("A0", "공공시설"),
     B0("B0", "주차시설"),

@@ -1,18 +1,11 @@
 package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringAreaCodeDeserializer;
-import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringAreaDetailCodeDeserializer;
-import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringBooleanDeserializer;
-import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringChargeMethodDeserializer;
-import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringLocalDateTimeDeserializer;
-import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringStationKindCodeDeserializer;
-import com.zerobase.zbcharger.domain.charger.dto.deserializer.StringStationKindDetailCodeDeserializer;
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
 import com.zerobase.zbcharger.domain.charger.type.AreaCode;
 import com.zerobase.zbcharger.domain.charger.type.AreaDetailCode;
 import com.zerobase.zbcharger.domain.charger.type.ChargeMethod;
+import com.zerobase.zbcharger.domain.charger.type.ChargerStat;
 import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
 import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import java.time.LocalDateTime;
@@ -112,34 +105,30 @@ public class ChargerInfo {
     /**
      * 충전기 상태
      */
-    private final int stat;
+    private final ChargerStat stat;
 
     /**
      * 상태 갱신 일시
      */
     @JsonProperty("statUpdDt")
-    @JsonDeserialize(using = StringLocalDateTimeDeserializer.class)
     private final LocalDateTime statUpdatedAt;
 
     /**
      * 마지막 충전 시작 일시
      */
     @JsonProperty("lastTsdt")
-    @JsonDeserialize(using = StringLocalDateTimeDeserializer.class)
     private final LocalDateTime lastChargeStartedAt;
 
     /**
      * 마지막 충전 종료 일시
      */
     @JsonProperty("lastTedt")
-    @JsonDeserialize(using = StringLocalDateTimeDeserializer.class)
     private final LocalDateTime lastChargeEndedAt;
 
     /**
      * 충전중 시작 일시
      */
     @JsonProperty("nowTsdt")
-    @JsonDeserialize(using = StringLocalDateTimeDeserializer.class)
     private final LocalDateTime nowChargeStartedAt;
 
     /**
@@ -150,42 +139,36 @@ public class ChargerInfo {
     /**
      * 충전 방식
      */
-    @JsonDeserialize(using = StringChargeMethodDeserializer.class)
     private final ChargeMethod method;
 
     /**
      * 지역 코드
      */
     @JsonProperty("zcode")
-    @JsonDeserialize(using = StringAreaCodeDeserializer.class)
     private final AreaCode areaCode;
 
     /**
      * 지역 구분 상세코드
      */
     @JsonProperty("zscode")
-    @JsonDeserialize(using = StringAreaDetailCodeDeserializer.class)
     private final AreaDetailCode areaDetailCode;
 
     /**
      * 충전소 구분 코드
      */
     @JsonProperty("kind")
-    @JsonDeserialize(using = StringStationKindCodeDeserializer.class)
     private final StationKindCode stationKindCode;
 
     /**
      * 충전소 구분 상세코드
      */
     @JsonProperty("kindDetail")
-    @JsonDeserialize(using = StringStationKindDetailCodeDeserializer.class)
     private final StationKindDetailCode stationKindDetailCode;
 
     /**
      * 주차료 무료 여부
      */
     @JsonProperty("parkingFree")
-    @JsonDeserialize(using = StringBooleanDeserializer.class)
     private final boolean parkingFreeYn;
 
     /**
@@ -196,7 +179,6 @@ public class ChargerInfo {
     /**
      * 이용자 제한
      */
-    @JsonDeserialize(using = StringBooleanDeserializer.class)
     private final boolean limitYn;
 
     /**
@@ -208,7 +190,6 @@ public class ChargerInfo {
      * 삭제 여부
      */
     @JsonProperty("delYn")
-    @JsonDeserialize(using = StringBooleanDeserializer.class)
     private final boolean deletedYn;
 
     /**
@@ -220,7 +201,6 @@ public class ChargerInfo {
     /**
      * 편의 제공 여부
      */
-    @JsonDeserialize(using = StringBooleanDeserializer.class)
     private final boolean trafficYn;
 
     public CompanyInfo getCompany() {
@@ -240,15 +220,15 @@ public class ChargerInfo {
             .address(address)
             .location(location)
             .useTime(useTime)
-//            .areaCode(areaCode)
-//            .areaDetailCode(areaDetailCode)
-//            .stationKindCode(stationKindCode)
-//            .stationKindDetailCode(stationKindDetailCode)
-//            .parkingFreeYn(parkingFreeYn)
+            .areaCode(areaCode)
+            .areaDetailCode(areaDetailCode)
+            .stationKindCode(stationKindCode)
+            .stationKindDetailCode(stationKindDetailCode)
+            .parkingFreeYn(parkingFreeYn)
             .note(note)
-//            .limitYn(limitYn)
-//            .limitDetail(limitDetail)
-//            .trafficYn(trafficYn)
+            .limitYn(limitYn)
+            .limitDetail(limitDetail)
+            .trafficYn(trafficYn)
             .latitude(latitude)
             .longitude(longitude)
             .build();
@@ -259,9 +239,9 @@ public class ChargerInfo {
             .id(stationId + chargerId)
             .stationId(stationId)
 //            .chargerType(chargerType)
-//            .stat(ChargerStat.fromValue(stat))
-//            .output(StringUtils.hasText(output) ? Integer.parseInt(output) : 0)
-//            .method(method)
+            .stat(stat)
+            .output(output)
+            .method(method)
             .statUpdatedAt(statUpdatedAt)
             .lastChargeStartedAt(lastChargeStartedAt)
             .lastChargeFinishedAt(lastChargeEndedAt)

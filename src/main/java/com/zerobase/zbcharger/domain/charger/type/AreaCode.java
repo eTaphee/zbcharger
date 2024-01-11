@@ -1,11 +1,12 @@
 package com.zerobase.zbcharger.domain.charger.type;
 
+import com.zerobase.zbcharger.domain.common.type.EnumCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum AreaCode {
+public enum AreaCode implements EnumCode {
     Z11("11", "서울특별시"),
     Z26("26", "부산광역시"),
     Z27("27", "대구광역시"),
@@ -27,12 +28,4 @@ public enum AreaCode {
 
     private final String value;
     private final String description;
-
-    public static AreaCode from(String code) {
-        try {
-            return AreaCode.valueOf("Z" + code);
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }
