@@ -18,6 +18,7 @@ import org.hibernate.annotations.Synchronize;
         select
         station_id,
         bit_or(charger_type) as charger_type,
+        bit_or(case when output < 50 then 1 else 2 end) as output_type,
         count(case when output < 50 then 1 end) as 'slow_count',
         count(case when output < 50 and stat = 2 then 1 end) as 'available_slow_count',
         count(case when output >= 50 then 1 end) as 'fast_count',
@@ -37,6 +38,11 @@ public class StationSummary {
     @Id
     @Column(name = "station_id")
     private final String id;
+
+    /**
+     * 충전기 타입(queyrdsl 에서 사용하기 위해 EnumSet 대신 int 로 사용) 1: 완속, 2: 급속
+     */
+    private final int outputType;
 
     /**
      * 지원 충전기 타입(queyrdsl 에서 사용하기 위해 EnumSet 대신 int 로 사용)

@@ -1,6 +1,7 @@
 package com.zerobase.zbcharger.domain.charger.entity.converter;
 
 import com.zerobase.zbcharger.domain.charger.type.ChargerType;
+import com.zerobase.zbcharger.util.EnumUtils;
 import jakarta.persistence.AttributeConverter;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +28,7 @@ public class ChargerTypeConverter implements
         EnumSet<ChargerType> set = EnumSet.noneOf(ChargerType.class);
 
         Arrays.stream(ChargerType.values())
-            .filter(type -> type.isFlagOfValue(dbData))
+            .filter(type -> EnumUtils.isFlagOfValue(type, dbData))
             .forEach(set::add);
 
         return Collections.unmodifiableSet(set);

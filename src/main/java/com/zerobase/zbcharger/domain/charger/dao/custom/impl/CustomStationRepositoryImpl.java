@@ -201,6 +201,7 @@ public class CustomStationRepositoryImpl implements CustomStationRepository {
                 company.operator,
                 company.tel,
                 station.useTime,
+                stationSummary.outputType,
                 station.parkingFreeYn,
                 station.useLimitYn
             ))
@@ -209,6 +210,8 @@ public class CustomStationRepositoryImpl implements CustomStationRepository {
             .on(station.companyId.eq(company.id),
                 company.deletedAt.isNull(),
                 station.deletedAt.isNull())
+            .innerJoin(stationSummary).fetchJoin()
+            .on(station.id.eq(stationSummary.id))
             .where(station.id.eq(id))
             .fetchOne();
 

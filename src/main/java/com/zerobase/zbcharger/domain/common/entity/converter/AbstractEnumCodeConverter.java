@@ -1,7 +1,7 @@
 package com.zerobase.zbcharger.domain.common.entity.converter;
 
 import com.zerobase.zbcharger.domain.common.type.EnumCode;
-import com.zerobase.zbcharger.util.EnumCodeUtils;
+import com.zerobase.zbcharger.util.EnumUtils;
 import jakarta.persistence.AttributeConverter;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +24,6 @@ public abstract class AbstractEnumCodeConverter<C, T extends Enum<T> & EnumCode<
 
     @Override
     public T convertToEntityAttribute(C dbData) {
-        return EnumCodeUtils.valueOf(enumType, (dbData != null) ? dbData.toString() : null);
+        return EnumUtils.valueOf(enumType, (dbData != null) ? dbData.toString() : null);
     }
 }
