@@ -7,13 +7,13 @@ import static com.zerobase.zbcharger.exception.constant.ErrorCode.STATION_NOT_FO
 
 import com.zerobase.zbcharger.domain.charger.dao.CompanyRepository;
 import com.zerobase.zbcharger.domain.charger.dao.StationRepository;
+import com.zerobase.zbcharger.domain.charger.dto.AddStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.SearchStationCondition;
 import com.zerobase.zbcharger.domain.charger.dto.StationDetail;
-import com.zerobase.zbcharger.domain.charger.dto.admin.AddStationRequest;
-import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
-import com.zerobase.zbcharger.domain.charger.dto.admin.StationResponse;
-import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateStationRequest;
-import com.zerobase.zbcharger.domain.charger.dto.client.SearchStationSummaryCondition;
-import com.zerobase.zbcharger.domain.charger.dto.client.StationSummary;
+import com.zerobase.zbcharger.domain.charger.dto.StationResponse;
+import com.zerobase.zbcharger.domain.charger.dto.UpdateStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.SearchStationSummaryCondition;
+import com.zerobase.zbcharger.domain.charger.dto.StationSummary;
 import com.zerobase.zbcharger.domain.charger.entity.Station;
 import com.zerobase.zbcharger.exception.CustomException;
 import java.util.Optional;
@@ -53,13 +53,14 @@ public class StationService {
     /**
      * 충전소 목록 조회
      *
-     * @param pageable 페이징 정보
-     * @param request
+     * @param pageable  페이징 정보
+     * @param condition
      * @return 충전소 목록
      */
     @Transactional(readOnly = true)
-    public Page<StationResponse> getStationList(Pageable pageable, SearchStationRequest request) {
-        return stationRepository.findAll(pageable, request).map(StationResponse::fromEntity);
+    public Page<StationResponse> searchStationList(Pageable pageable,
+        SearchStationCondition condition) {
+        return stationRepository.findAll(pageable, condition).map(StationResponse::fromEntity);
     }
 
     /**
@@ -107,6 +108,12 @@ public class StationService {
         return stationRepository.findAllStationSummary(pageable, condition);
     }
 
+    /**
+     * 충전소 상세 조회
+     *
+     * @param id 충전소 아이디
+     * @return 충전소 상세
+     */
     @Transactional(readOnly = true)
     public StationDetail getStationDetail(String id) {
         return stationRepository.findStationDetailById(id)
@@ -150,6 +157,4 @@ public class StationService {
 
         return station;
     }
-
-
 }

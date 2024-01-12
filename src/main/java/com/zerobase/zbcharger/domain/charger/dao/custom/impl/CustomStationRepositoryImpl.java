@@ -1,10 +1,16 @@
 package com.zerobase.zbcharger.domain.charger.dao.custom.impl;
 
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.areaCode;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.areaDetailCode;
 import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.chargerTypeBitAnd;
 import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.companyId;
 import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.companyIdIn;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.deletedYn;
 import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.distance;
 import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.parkingFreeYn;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.stationKindCode;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.stationKindDetailCode;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.trafficYn;
 import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.useLimitYn;
 import static com.zerobase.zbcharger.domain.charger.entity.QCompany.company;
 import static com.zerobase.zbcharger.domain.charger.entity.QStation.station;
@@ -17,16 +23,13 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.OrderSpecifier.NullHandling;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zerobase.zbcharger.domain.charger.dao.custom.CustomStationRepository;
+import com.zerobase.zbcharger.domain.charger.dto.SearchStationCondition;
 import com.zerobase.zbcharger.domain.charger.dto.StationDetail;
-import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
-import com.zerobase.zbcharger.domain.charger.dto.client.SearchStationSummaryCondition;
-import com.zerobase.zbcharger.domain.charger.dto.client.StationSummary;
+import com.zerobase.zbcharger.domain.charger.dto.SearchStationSummaryCondition;
+import com.zerobase.zbcharger.domain.charger.dto.StationSummary;
 import com.zerobase.zbcharger.domain.charger.entity.Station;
-import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
-import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +46,7 @@ public class CustomStationRepositoryImpl implements CustomStationRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Station> findAll(Pageable pageable, SearchStationRequest request) {
+    public Page<Station> findAll(Pageable pageable, SearchStationCondition request) {
         Predicate predicate = toPredicate(request);
 
         List<Station> contents = queryFactory.selectFrom(station)
@@ -94,56 +97,20 @@ public class CustomStationRepositoryImpl implements CustomStationRepository {
         return new OrderSpecifier(Order.ASC, NullExpression.DEFAULT, NullHandling.Default);
     }
 
-    private Predicate toPredicate(SearchStationRequest request) {
+    private Predicate toPredicate(SearchStationCondition condition) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        builder.and(companyId(request.companyId()));
-        builder.and(areaCode(request.areaCode()));
-        builder.and(areaDetailCode(request.areaDetailCode()));
-//        builder.and(stationKindCode(request.stationKindCode()));
-//        builder.and(stationKindDetailCode(request.stationKindDetailCode()));
-//        builder.and(parkingFreeYn(request.parkingFreeYn()));
-//        builder.and(useLimitYn(request.useLimitYn()));
-//        builder.and(trafficYn(request.trafficYn()));
-//        builder.and(deletedYn(request.deletedYn()));
+        builder.and(companyId(condition.companyId()));
+        builder.and(areaCode(condition.areaCode()));
+        builder.and(areaDetailCode(condition.areaDetailCode()));
+        builder.and(stationKindCode(condition.stationKindCode()));
+        builder.and(stationKindDetailCode(condition.stationKindDetailCode()));
+        builder.and(parkingFreeYn(condition.parkingFreeYn()));
+        builder.and(useLimitYn(condition.useLimitYn()));
+        builder.and(trafficYn(condition.trafficYn()));
+        builder.and(deletedYn(condition.deletedYn()));
 
         return builder;
-    }
-
-
-    private static BooleanExpression areaCode(String areaCode) {
-        if (areaCode == null) {
-            return null;
-        }
-
-        return null;
-//        return station.areaCode.eq(areaCode);
-    }
-
-    private static BooleanExpression areaDetailCode(String areaDetailCode) {
-        if (areaDetailCode == null) {
-            return null;
-        }
-
-        return null;
-//        return station.areaDetailCode.eq(areaDetailCode);
-    }
-
-    private static BooleanExpression stationKindCode(StationKindCode stationKind) {
-        if (stationKind == null) {
-            return null;
-        }
-
-        return station.stationKindCode.eq(stationKind);
-    }
-
-    private static BooleanExpression stationKindDetailCode(
-        StationKindDetailCode stationKindDetailCode) {
-        if (stationKindDetailCode == null) {
-            return null;
-        }
-
-        return station.stationKindDetailCode.eq(stationKindDetailCode);
     }
 
     @Override
@@ -232,5 +199,4 @@ public class CustomStationRepositoryImpl implements CustomStationRepository {
 
         return builder;
     }
-
 }

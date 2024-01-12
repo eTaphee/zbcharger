@@ -1,13 +1,13 @@
 package com.zerobase.zbcharger.domain.charger.controller;
 
 import com.zerobase.zbcharger.configuration.security.annotation.RoleAdmin;
+import com.zerobase.zbcharger.domain.charger.dto.SearchStationCondition;
 import com.zerobase.zbcharger.domain.charger.dto.StationDetail;
-import com.zerobase.zbcharger.domain.charger.dto.admin.AddStationRequest;
-import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
-import com.zerobase.zbcharger.domain.charger.dto.admin.StationResponse;
-import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateStationRequest;
-import com.zerobase.zbcharger.domain.charger.dto.client.SearchStationSummaryCondition;
-import com.zerobase.zbcharger.domain.charger.dto.client.StationSummary;
+import com.zerobase.zbcharger.domain.charger.dto.AddStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.StationResponse;
+import com.zerobase.zbcharger.domain.charger.dto.UpdateStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.SearchStationSummaryCondition;
+import com.zerobase.zbcharger.domain.charger.dto.StationSummary;
 import com.zerobase.zbcharger.domain.charger.service.StationService;
 import com.zerobase.zbcharger.util.ResponseEntityUtils;
 import jakarta.validation.Valid;
@@ -42,10 +42,10 @@ public class StationController {
 
     @RoleAdmin
     @GetMapping
-    public ResponseEntity<Page<StationResponse>> getStationList(
+    public Page<StationResponse> searchStationList(
         @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable,
-        SearchStationRequest request) {
-        return ResponseEntity.ok(stationService.getStationList(pageable, request));
+        SearchStationCondition condition) {
+        return stationService.searchStationList(pageable, condition);
     }
 
     @RoleAdmin

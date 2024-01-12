@@ -8,8 +8,11 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.zerobase.zbcharger.domain.charger.type.AreaCode;
+import com.zerobase.zbcharger.domain.charger.type.AreaDetailCode;
 import com.zerobase.zbcharger.domain.charger.type.ChargerType;
 import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
+import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import java.util.Set;
 
 public final class StationExpression {
@@ -81,5 +84,23 @@ public final class StationExpression {
         return Expressions.numberTemplate(Double.class, "ST_Distance_Sphere({0}, {1})",
             Expressions.stringTemplate("POINT({0}, {1})", longitude, latitude),
             Expressions.stringTemplate("POINT({0}, {1})", station.longitude, station.latitude));
+    }
+
+    public static BooleanExpression areaCode(AreaCode areaCode) {
+        return (areaCode != null) ? station.areaCode.eq(areaCode) : null;
+    }
+
+    public static BooleanExpression areaDetailCode(AreaDetailCode areaDetailCode) {
+        return (areaDetailCode != null) ? station.areaDetailCode.eq(areaDetailCode) : null;
+    }
+
+    public static BooleanExpression stationKindCode(StationKindCode stationKind) {
+        return (stationKind != null) ? station.stationKindCode.eq(stationKind) : null;
+    }
+
+    public static BooleanExpression stationKindDetailCode(
+        StationKindDetailCode stationKindDetailCode) {
+        return (stationKindDetailCode != null) ?
+            station.stationKindDetailCode.eq(stationKindDetailCode) : null;
     }
 }

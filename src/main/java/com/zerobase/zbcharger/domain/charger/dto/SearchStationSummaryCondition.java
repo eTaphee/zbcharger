@@ -1,4 +1,4 @@
-package com.zerobase.zbcharger.domain.charger.dto.client;
+package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.zerobase.zbcharger.domain.charger.type.ChargerType;
 import java.util.Set;

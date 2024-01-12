@@ -49,7 +49,7 @@ public class ChargerService {
         Charger charger = getChargerOrThrow(id);
 
         throwIfChargerDeleted(charger);
-        
+
         charger.update(request.chargerType(), request.method(), request.output());
     }
 

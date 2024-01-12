@@ -168,17 +168,18 @@ public class Station extends AuditableEntity implements Persistable<String> {
         this.deletedAt = null;
     }
 
-    public void update(String name, String address, String useTime, String areaCode,
-        String areaDetailCode, String stationKindCode, String stationKindDetailCode,
-        boolean parkingFreeYn, String note, boolean useLimitYn, String useLimitDetail,
-        boolean trafficYn, Double latitude, Double longitude) {
+    public void update(String name, String address, String useTime, AreaCode areaCode,
+        AreaDetailCode areaDetailCode, StationKindCode stationKindCode,
+        StationKindDetailCode stationKindDetailCode, boolean parkingFreeYn, String note,
+        boolean useLimitYn, String useLimitDetail, boolean trafficYn, Double latitude,
+        Double longitude) {
         this.name = name;
         this.address = address;
         this.useTime = useTime;
-//        this.areaCode = areaCode;
-//        this.areaDetailCode = areaDetailCode;
-//        this.stationKind = stationKindCode;
-//        this.stationKindDetailCode = stationKindDetailCode;
+        this.areaCode = areaCode;
+        this.areaDetailCode = areaDetailCode;
+        this.stationKindCode = stationKindCode;
+        this.stationKindDetailCode = stationKindDetailCode;
         this.parkingFreeYn = parkingFreeYn;
         this.note = note;
         this.useLimitYn = useLimitYn;
