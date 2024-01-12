@@ -1,18 +1,22 @@
-package com.zerobase.zbcharger.domain.charger.dto.admin;
+package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
+import com.zerobase.zbcharger.domain.charger.type.ChargeMethod;
+import com.zerobase.zbcharger.domain.charger.type.ChargerStat;
+import com.zerobase.zbcharger.domain.charger.type.ChargerType;
 import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.Builder;
 
 @Builder
 public record ChargerResponse(
     String id,
     String stationId,
-    String chargerType,
+    Set<ChargerType> chargerTypes,
     String location,
-    int stat,
-    String output,
-    String method,
+    ChargerStat stat,
+    int output,
+    ChargeMethod method,
     LocalDateTime statUpdatedAt,
     LocalDateTime lastChargeStartedAt,
     LocalDateTime lastChargeEndedAt,
@@ -25,8 +29,7 @@ public record ChargerResponse(
         return ChargerResponse.builder()
             .id(charger.getId())
             .stationId(charger.getStationId())
-            .chargerType(charger.getChargerType())
-            .location(charger.getLocation())
+            .chargerTypes(charger.getChargerType())
             .stat(charger.getStat())
             .output(charger.getOutput())
             .method(charger.getMethod())

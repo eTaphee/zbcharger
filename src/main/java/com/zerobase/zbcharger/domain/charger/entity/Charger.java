@@ -127,10 +127,9 @@ public class Charger extends AuditableEntity implements Persistable<String> {
         this.deletedYn = false;
     }
 
-    public void update(String chargerType, String location, int output, String method) {
-//        this.chargerType = chargerType;
-//        this.location = location;
-//        this.output = output;
-//        this.method = method;
+    public void update(Set<ChargerType> chargerType, ChargeMethod method, int output) {
+        this.chargerType = chargerType;
+        this.method = method;
+        this.output = output;
     }
 }

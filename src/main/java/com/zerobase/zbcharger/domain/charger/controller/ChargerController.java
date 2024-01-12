@@ -3,9 +3,9 @@ package com.zerobase.zbcharger.domain.charger.controller;
 import com.zerobase.zbcharger.configuration.security.annotation.RoleAdmin;
 import com.zerobase.zbcharger.domain.charger.dto.ChargerSummary;
 import com.zerobase.zbcharger.domain.charger.dto.SearchChargerSummaryCondition;
-import com.zerobase.zbcharger.domain.charger.dto.admin.AddChargerRequest;
-import com.zerobase.zbcharger.domain.charger.dto.admin.ChargerResponse;
-import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateChargerRequest;
+import com.zerobase.zbcharger.domain.charger.dto.AddChargerRequest;
+import com.zerobase.zbcharger.domain.charger.dto.ChargerResponse;
+import com.zerobase.zbcharger.domain.charger.dto.UpdateChargerRequest;
 import com.zerobase.zbcharger.domain.charger.service.admin.ChargerService;
 import com.zerobase.zbcharger.util.ResponseEntityUtils;
 import jakarta.validation.Valid;
@@ -40,9 +40,9 @@ public class ChargerController {
 
     @RoleAdmin
     @GetMapping
-    public ResponseEntity<Page<ChargerResponse>> getChargerList(
+    public Page<ChargerResponse> searchChargerList(
         @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(chargerService.getChargerList(pageable));
+        return chargerService.searchChargerList(pageable);
     }
 
     @RoleAdmin
@@ -60,6 +60,6 @@ public class ChargerController {
 
     @GetMapping("/summary")
     public List<ChargerSummary> searchChargerSummaryList(SearchChargerSummaryCondition condition) {
-         return chargerService.searchChargerSummaryList(condition);
+        return chargerService.searchChargerSummaryList(condition);
     }
 }
