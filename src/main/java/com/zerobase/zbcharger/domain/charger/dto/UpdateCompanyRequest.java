@@ -1,4 +1,4 @@
-package com.zerobase.zbcharger.domain.charger.dto.admin;
+package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.zerobase.zbcharger.validator.annotation.Phone;
 import jakarta.validation.constraints.NotBlank;
