@@ -7,12 +7,14 @@ import static com.zerobase.zbcharger.exception.constant.ErrorCode.STATION_NOT_FO
 
 import com.zerobase.zbcharger.domain.charger.dao.ChargerRepository;
 import com.zerobase.zbcharger.domain.charger.dao.StationRepository;
-import com.zerobase.zbcharger.domain.charger.dto.admin.AddChargerRequest;
-import com.zerobase.zbcharger.domain.charger.dto.ChargerInfo;
-import com.zerobase.zbcharger.domain.charger.dto.admin.ChargerResponse;
-import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateChargerRequest;
+import com.zerobase.zbcharger.domain.charger.dto.AddChargerRequest;
+import com.zerobase.zbcharger.domain.charger.dto.ChargerResponse;
+import com.zerobase.zbcharger.domain.charger.dto.ChargerSummary;
+import com.zerobase.zbcharger.domain.charger.dto.SearchChargerSummaryCondition;
+import com.zerobase.zbcharger.domain.charger.dto.UpdateChargerRequest;
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
 import com.zerobase.zbcharger.exception.CustomException;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,7 +40,7 @@ public class ChargerService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ChargerResponse> getChargerList(Pageable pageable) {
+    public Page<ChargerResponse> searchChargerList(Pageable pageable) {
         return chargerRepository.findAll(pageable).map(ChargerResponse::fromEntity);
     }
 
@@ -48,8 +50,7 @@ public class ChargerService {
 
         throwIfChargerDeleted(charger);
 
-        charger.update(request.chargerType(), request.location(), request.output(),
-            request.method());
+        charger.update(request.chargerType(), request.method(), request.output());
     }
 
     @Transactional
@@ -59,6 +60,11 @@ public class ChargerService {
         throwIfChargerDeleted(charger);
 
         charger.delete();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChargerSummary> searchChargerSummaryList(SearchChargerSummaryCondition condition) {
+        return chargerRepository.findAllChargeSummary(condition);
     }
 
     private void throwIfChargerExists(Charger charger) {

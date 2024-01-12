@@ -1,4 +1,4 @@
-package com.zerobase.zbcharger.domain.charger.dto.admin;
+package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.zerobase.zbcharger.domain.charger.entity.Company;
 import java.time.LocalDateTime;

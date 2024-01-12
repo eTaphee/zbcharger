@@ -1,7 +1,20 @@
 package com.zerobase.zbcharger.domain.charger.dao.custom.impl;
 
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.areaCode;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.areaDetailCode;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.chargerTypeBitAnd;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.companyId;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.companyIdIn;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.deletedYn;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.distance;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.parkingFreeYn;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.stationKindCode;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.stationKindDetailCode;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.trafficYn;
+import static com.zerobase.zbcharger.domain.charger.dao.expression.StationExpression.useLimitYn;
 import static com.zerobase.zbcharger.domain.charger.entity.QCompany.company;
 import static com.zerobase.zbcharger.domain.charger.entity.QStation.station;
+import static com.zerobase.zbcharger.domain.charger.entity.QStationSummary.stationSummary;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.NullExpression;
@@ -9,16 +22,22 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.OrderSpecifier.NullHandling;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zerobase.zbcharger.domain.charger.dao.custom.CustomStationRepository;
-import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
+import com.zerobase.zbcharger.domain.charger.dto.SearchStationCondition;
+import com.zerobase.zbcharger.domain.charger.dto.StationDetail;
+import com.zerobase.zbcharger.domain.charger.dto.SearchStationSummaryCondition;
+import com.zerobase.zbcharger.domain.charger.dto.StationSummary;
 import com.zerobase.zbcharger.domain.charger.entity.Station;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 
 @RequiredArgsConstructor
@@ -27,7 +46,7 @@ public class CustomStationRepositoryImpl implements CustomStationRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Station> findAll(Pageable pageable, SearchStationRequest request) {
+    public Page<Station> findAll(Pageable pageable, SearchStationCondition request) {
         Predicate predicate = toPredicate(request);
 
         List<Station> contents = queryFactory.selectFrom(station)
@@ -78,107 +97,106 @@ public class CustomStationRepositoryImpl implements CustomStationRepository {
         return new OrderSpecifier(Order.ASC, NullExpression.DEFAULT, NullHandling.Default);
     }
 
-    private Predicate toPredicate(SearchStationRequest request) {
+    private Predicate toPredicate(SearchStationCondition condition) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        builder.and(companyId(request.companyId()));
-        builder.and(areaCode(request.areaCode()));
-        builder.and(areaDetailCode(request.areaDetailCode()));
-        builder.and(stationKindCode(request.stationKindCode()));
-        builder.and(stationKindDetailCode(request.stationKindDetailCode()));
-        builder.and(parkingFreeYn(request.parkingFreeYn()));
-        builder.and(useLimitYn(request.useLimitYn()));
-        builder.and(trafficYn(request.trafficYn()));
-        builder.and(deletedYn(request.deletedYn()));
+        builder.and(companyId(condition.companyId()));
+        builder.and(areaCode(condition.areaCode()));
+        builder.and(areaDetailCode(condition.areaDetailCode()));
+        builder.and(stationKindCode(condition.stationKindCode()));
+        builder.and(stationKindDetailCode(condition.stationKindDetailCode()));
+        builder.and(parkingFreeYn(condition.parkingFreeYn()));
+        builder.and(useLimitYn(condition.useLimitYn()));
+        builder.and(trafficYn(condition.trafficYn()));
+        builder.and(deletedYn(condition.deletedYn()));
 
         return builder;
     }
 
-    private static BooleanExpression companyId(String companyId) {
-        if (companyId == null) {
-            return null;
+    @Override
+    public Slice<StationSummary> findAllStationSummary(Pageable pageable,
+        SearchStationSummaryCondition condition) {
+
+        var distanceFromCurrentLocation = distance(condition.currentLatitude(),
+            condition.currentLongitude());
+
+        List<StationSummary> contents = queryFactory
+            .select(
+                Projections.constructor(StationSummary.class,
+                    Projections.constructor(StationSummary.Company.class,
+                        company.id,
+                        company.name),
+                    station.id,
+                    station.name,
+                    station.address,
+                    station.location,
+                    station.latitude,
+                    station.longitude,
+                    distanceFromCurrentLocation.as("distance"),
+                    station.useLimitYn,
+                    station.parkingFreeYn,
+                    station.stationKindCode,
+                    stationSummary.chargerType))
+            .from(station)
+            .innerJoin(company).fetchJoin()
+            .on(station.companyId.eq(company.id),
+                company.deletedAt.isNull(),
+                station.deletedAt.isNull())
+            .innerJoin(stationSummary).fetchJoin()
+            .on(station.id.eq(stationSummary.id))
+            .where(toPredicate(condition))
+            .orderBy(distanceFromCurrentLocation.asc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize() + 1)
+            .fetch();
+
+        boolean hasNext = false;
+        if (contents.size() > pageable.getPageSize()) {
+            contents.remove(pageable.getPageSize());
+            hasNext = true;
         }
 
-        return station.companyId.eq(companyId);
+        return new SliceImpl<>(contents, pageable, hasNext);
     }
 
-    private static BooleanExpression areaCode(String areaCode) {
-        if (areaCode == null) {
-            return null;
-        }
+    @Override
+    public Optional<StationDetail> findStationDetailById(String id) {
+        StationDetail stationDetail = queryFactory.
+            select(Projections.constructor(StationDetail.class,
+                station.address,
+                station.location,
+                company.operator,
+                company.tel,
+                station.useTime,
+                stationSummary.outputType,
+                station.parkingFreeYn,
+                station.useLimitYn
+            ))
+            .from(station)
+            .innerJoin(company).fetchJoin()
+            .on(station.companyId.eq(company.id),
+                company.deletedAt.isNull(),
+                station.deletedAt.isNull())
+            .innerJoin(stationSummary).fetchJoin()
+            .on(station.id.eq(stationSummary.id))
+            .where(station.id.eq(id))
+            .fetchOne();
 
-        return station.areaCode.eq(areaCode);
+        return Optional.ofNullable(stationDetail);
     }
 
-    private static BooleanExpression areaDetailCode(String areaDetailCode) {
-        if (areaDetailCode == null) {
-            return null;
-        }
+    private Predicate toPredicate(SearchStationSummaryCondition condition) {
+        BooleanBuilder builder = new BooleanBuilder();
 
-        return station.areaDetailCode.eq(areaDetailCode);
-    }
+        var distanceFromBaseLocation = distance(condition.baseLatitude(),
+            condition.baseLongitude());
 
-    private static BooleanExpression stationKindCode(String stationKindCode) {
-        if (stationKindCode == null) {
-            return null;
-        }
+        builder.and(distanceFromBaseLocation.loe(condition.radius()));
+        builder.and(parkingFreeYn(condition.parkingFreeYn()));
+        builder.and(useLimitYn(condition.useLimitYn()));
+        builder.and(companyIdIn(condition.companyIds()));
+        builder.and(chargerTypeBitAnd(condition.chargerTypes()));
 
-        return station.stationKindCode.eq(stationKindCode);
-    }
-
-    private static BooleanExpression stationKindDetailCode(String stationKindDetailCode) {
-        if (stationKindDetailCode == null) {
-            return null;
-        }
-
-        return station.stationKindDetailCode.eq(stationKindDetailCode);
-    }
-
-    private static BooleanExpression parkingFreeYn(Boolean parkingFreeYn) {
-        if (parkingFreeYn == null) {
-            return null;
-        }
-
-        if (parkingFreeYn) {
-            return station.parkingFreeYn.isTrue();
-        }
-
-        return station.parkingFreeYn.isFalse();
-    }
-
-    private static BooleanExpression useLimitYn(Boolean useLimitYn) {
-        if (useLimitYn == null) {
-            return null;
-        }
-
-        if (useLimitYn) {
-            return station.useLimitYn.isTrue();
-        }
-
-        return station.useLimitYn.isFalse();
-    }
-
-    private static BooleanExpression trafficYn(Boolean trafficYn) {
-        if (trafficYn == null) {
-            return null;
-        }
-
-        if (trafficYn) {
-            return station.trafficYn.isTrue();
-        }
-
-        return station.trafficYn.isFalse();
-    }
-
-    private static BooleanExpression deletedYn(Boolean deletedYn) {
-        if (deletedYn == null) {
-            return null;
-        }
-
-        if (deletedYn) {
-            return station.deletedAt.isNotNull();
-        }
-
-        return station.deletedAt.isNull();
+        return builder;
     }
 }

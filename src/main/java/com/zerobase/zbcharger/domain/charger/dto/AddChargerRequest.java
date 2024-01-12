@@ -1,6 +1,12 @@
-package com.zerobase.zbcharger.domain.charger.dto.admin;
+package com.zerobase.zbcharger.domain.charger.dto;
+
+import static com.zerobase.zbcharger.domain.charger.type.ChargerStat.AVAILABLE;
 
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
+import com.zerobase.zbcharger.domain.charger.type.ChargeMethod;
+import com.zerobase.zbcharger.domain.charger.type.ChargerType;
+import jakarta.validation.constraints.NotBlank;
+import java.util.Set;
 
 /**
  * 충전기 추가 요청
@@ -13,22 +19,21 @@ import com.zerobase.zbcharger.domain.charger.entity.Charger;
  * @param method      충전 방식
  */
 public record AddChargerRequest(
-    String id,
-    String stationId,
-    String chargerType,
-    String location,
-    String output,
-    String method
+    @NotBlank String id,
+    @NotBlank String stationId,
+    Set<ChargerType> chargerType,
+    ChargeMethod method,
+    int output
 ) {
 
     public Charger toEntity() {
         return Charger.builder()
             .id(id)
             .stationId(stationId)
+            .stat(AVAILABLE)
             .chargerType(chargerType)
-            .location(location)
-            .output(output)
             .method(method)
+            .output(output)
             .build();
     }
 }

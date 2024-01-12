@@ -1,11 +1,11 @@
-package com.zerobase.zbcharger.domain.charger.controller.admin;
+package com.zerobase.zbcharger.domain.charger.controller;
 
 import com.zerobase.zbcharger.configuration.security.annotation.RoleAdmin;
-import com.zerobase.zbcharger.domain.charger.dto.admin.AddCompanyRequest;
-import com.zerobase.zbcharger.domain.charger.dto.admin.CompanyResponse;
-import com.zerobase.zbcharger.domain.charger.dto.admin.SearchCompanyRequest;
-import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateCompanyRequest;
-import com.zerobase.zbcharger.domain.charger.service.admin.CompanyService;
+import com.zerobase.zbcharger.domain.charger.dto.AddCompanyRequest;
+import com.zerobase.zbcharger.domain.charger.dto.SearchCompanyCondition;
+import com.zerobase.zbcharger.domain.charger.dto.CompanyResponse;
+import com.zerobase.zbcharger.domain.charger.dto.UpdateCompanyRequest;
+import com.zerobase.zbcharger.domain.charger.service.CompanyService;
 import com.zerobase.zbcharger.util.ResponseEntityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RoleAdmin
 @RestController
-@RequestMapping("/admin/companies")
+@RequestMapping("/companies")
 @RequiredArgsConstructor
 public class CompanyController {
 
@@ -37,10 +37,10 @@ public class CompanyController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CompanyResponse>> getCompanyList(
+    public Page<CompanyResponse> searchCompanyList(
         @PageableDefault(sort = "id", direction = Direction.ASC) Pageable pageable,
-        SearchCompanyRequest request) {
-        return ResponseEntity.ok(companyService.getCompanyList(pageable, request));
+        SearchCompanyCondition condition) {
+        return companyService.searchCompanyList(pageable, condition);
     }
 
     @DeleteMapping("{id}")

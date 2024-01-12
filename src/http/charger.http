@@ -1,34 +1,33 @@
-### 충전기 조회
-GET {{host}}/admin/chargers
-Authorization: Bearer {{accessToken}}
-
-
 ### 충전기 등록
-POST {{host}}/admin/chargers
+POST {{host}}/chargers
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "id": "string",
-  "stationId": "ACAC0002",
-  "chargerType": "02",
-  "location": "지하1층",
+  "id": "string3",
+  "stationId": "ACAC0001",
+  "chargerType": [ "CHA", "DC" ],
+  "output": 100,
+  "method": "SINGLE"
+}
+
+### 충전기 조회
+GET {{host}}/chargers
+Authorization: Bearer {{accessToken}}
+
+
+### 충전기 수정
+PATCH {{host}}/chargers/string
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "chargerType": ["AC"],
+  "location": "지하12층",
   "output": "250",
-  "method": "단독"
+  "method": "MULTI"
 }
 
 ### 충전기 삭제
-DELETE {{host}}/admin/chargers/string
+DELETE {{host}}/chargers/string
 Authorization: Bearer {{accessToken}}
-
-### 충전기 수정
-PATCH {{host}}/admin/chargers/string
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-{
-  "chargerType": "02",
-  "location": "지하12층",
-  "output": "250",
-  "method": "단독"
-}

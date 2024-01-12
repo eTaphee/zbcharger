@@ -10,7 +10,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zerobase.zbcharger.domain.charger.dao.custom.CustomCompanyRepository;
-import com.zerobase.zbcharger.domain.charger.dto.admin.SearchCompanyRequest;
+import com.zerobase.zbcharger.domain.charger.dto.SearchCompanyCondition;
 import com.zerobase.zbcharger.domain.charger.entity.Company;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Company> findAll(Pageable pageable, SearchCompanyRequest request) {
+    public Page<Company> findAll(Pageable pageable, SearchCompanyCondition request) {
         Predicate predicate = toPredicate(request);
 
         List<Company> contents = queryFactory.selectFrom(company)
@@ -65,7 +65,7 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
             .toArray(OrderSpecifier[]::new);
     }
 
-    private static Predicate toPredicate(SearchCompanyRequest request) {
+    private static Predicate toPredicate(SearchCompanyCondition request) {
         return deletedYn(request.deletedYn());
     }
 

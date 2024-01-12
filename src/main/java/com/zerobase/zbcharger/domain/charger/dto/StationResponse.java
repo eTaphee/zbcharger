@@ -1,10 +1,10 @@
-package com.zerobase.zbcharger.domain.charger.dto.admin;
+package com.zerobase.zbcharger.domain.charger.dto;
 
 import com.zerobase.zbcharger.domain.charger.entity.Station;
-import com.zerobase.zbcharger.domain.charger.entity.StationKind;
-import com.zerobase.zbcharger.domain.charger.entity.StationKindDetail;
-import com.zerobase.zbcharger.domain.charger.entity.ZCode;
-import com.zerobase.zbcharger.domain.charger.entity.ZSCode;
+import com.zerobase.zbcharger.domain.charger.type.AreaCode;
+import com.zerobase.zbcharger.domain.charger.type.AreaDetailCode;
+import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
+import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
@@ -14,11 +14,12 @@ public record StationResponse(
     String companyId,
     String name,
     String address,
+    String location,
     String useTime,
-    String area,
-    String areaDetail,
-    String stationKind,
-    String stationKindDetail,
+    AreaCode area,
+    AreaDetailCode areaDetail,
+    StationKindCode stationKind,
+    StationKindDetailCode stationKindDetail,
     boolean parkingFreeYn,
     String note,
     boolean useLimitYn,
@@ -38,12 +39,13 @@ public record StationResponse(
             .companyId(station.getCompanyId())
             .name(station.getName())
             .address(station.getAddress())
+            .location(station.getLocation())
             .useTime(station.getUseTime())
-            .area(ZCode.from(station.getAreaCode()).getName())
-            .areaDetail(ZSCode.from(station.getAreaDetailCode()).getName())
-            .stationKind(StationKind.valueOf(station.getStationKindCode()).getName())
-            .stationKindDetail(
-                StationKindDetail.valueOf(station.getStationKindDetailCode()).getName())
+            .area(station.getAreaCode())
+            .area(station.getAreaCode())
+            .areaDetail(station.getAreaDetailCode())
+            .stationKind(station.getStationKindCode())
+            .stationKindDetail(station.getStationKindDetailCode())
             .parkingFreeYn(station.isParkingFreeYn())
             .note(station.getNote())
             .useLimitYn(station.isUseLimitYn())
@@ -56,6 +58,5 @@ public record StationResponse(
             .updatedAt(station.getUpdatedAt())
             .deletedAt(station.getDeletedAt())
             .build();
-
     }
 }

@@ -1,14 +1,14 @@
-package com.zerobase.zbcharger.domain.charger.service.admin;
+package com.zerobase.zbcharger.domain.charger.service;
 
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.COMPANY_ALREADY_DELETED;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.COMPANY_ALREADY_EXISTS;
 import static com.zerobase.zbcharger.exception.constant.ErrorCode.COMPANY_NOT_FOUND;
 
 import com.zerobase.zbcharger.domain.charger.dao.CompanyRepository;
-import com.zerobase.zbcharger.domain.charger.dto.admin.AddCompanyRequest;
-import com.zerobase.zbcharger.domain.charger.dto.admin.CompanyResponse;
-import com.zerobase.zbcharger.domain.charger.dto.admin.SearchCompanyRequest;
-import com.zerobase.zbcharger.domain.charger.dto.admin.UpdateCompanyRequest;
+import com.zerobase.zbcharger.domain.charger.dto.AddCompanyRequest;
+import com.zerobase.zbcharger.domain.charger.dto.CompanyResponse;
+import com.zerobase.zbcharger.domain.charger.dto.SearchCompanyCondition;
+import com.zerobase.zbcharger.domain.charger.dto.UpdateCompanyRequest;
 import com.zerobase.zbcharger.domain.charger.entity.Company;
 import com.zerobase.zbcharger.exception.CustomException;
 import java.util.Optional;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 관리자용 회사 서비스
+ * 회사 서비스
  */
 @Service
 @RequiredArgsConstructor
@@ -69,7 +69,6 @@ public class CompanyService {
         throwIfCompanyDeleted(company);
 
         company.delete();
-        // TODO: station, charger delete 여부
     }
 
     /**
@@ -80,8 +79,9 @@ public class CompanyService {
      * @return 회사 목록
      */
     @Transactional(readOnly = true)
-    public Page<CompanyResponse> getCompanyList(Pageable pageable, SearchCompanyRequest request) {
-        return companyRepository.findAll(pageable, request).map(CompanyResponse::fromEntity);
+    public Page<CompanyResponse> searchCompanyList(Pageable pageable,
+        SearchCompanyCondition condition) {
+        return companyRepository.findAll(pageable, condition).map(CompanyResponse::fromEntity);
     }
 
     private void throwIfCompanyExists(Company company) {
