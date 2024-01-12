@@ -7,6 +7,7 @@ import static com.zerobase.zbcharger.exception.constant.ErrorCode.STATION_NOT_FO
 
 import com.zerobase.zbcharger.domain.charger.dao.CompanyRepository;
 import com.zerobase.zbcharger.domain.charger.dao.StationRepository;
+import com.zerobase.zbcharger.domain.charger.dto.StationDetail;
 import com.zerobase.zbcharger.domain.charger.dto.admin.AddStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.StationResponse;
@@ -106,6 +107,12 @@ public class StationService {
         return stationRepository.findAllStationSummary(pageable, condition);
     }
 
+    @Transactional(readOnly = true)
+    public StationDetail getStationDetail(String id) {
+        return stationRepository.findStationDetailById(id)
+            .orElseThrow(() -> new CustomException(STATION_NOT_FOUND));
+    }
+
     private void throwIfStationExists(Station station) {
         if (station != null && !station.isDeleted()) {
             throw new CustomException(STATION_ALREADY_EXISTS);
@@ -143,4 +150,6 @@ public class StationService {
 
         return station;
     }
+
+
 }

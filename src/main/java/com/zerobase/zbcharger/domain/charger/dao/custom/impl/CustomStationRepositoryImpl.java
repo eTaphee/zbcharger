@@ -20,6 +20,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zerobase.zbcharger.domain.charger.dao.custom.CustomStationRepository;
+import com.zerobase.zbcharger.domain.charger.dto.StationDetail;
 import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.client.SearchStationSummaryCondition;
 import com.zerobase.zbcharger.domain.charger.dto.client.StationSummary;
@@ -27,6 +28,7 @@ import com.zerobase.zbcharger.domain.charger.entity.Station;
 import com.zerobase.zbcharger.domain.charger.type.StationKindCode;
 import com.zerobase.zbcharger.domain.charger.type.StationKindDetailCode;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -188,6 +190,29 @@ public class CustomStationRepositoryImpl implements CustomStationRepository {
         }
 
         return new SliceImpl<>(contents, pageable, hasNext);
+    }
+
+    @Override
+    public Optional<StationDetail> findStationDetailById(String id) {
+        StationDetail stationDetail = queryFactory.
+            select(Projections.constructor(StationDetail.class,
+                station.address,
+                station.location,
+                company.operator,
+                company.tel,
+                station.useTime,
+                station.parkingFreeYn,
+                station.useLimitYn
+            ))
+            .from(station)
+            .innerJoin(company).fetchJoin()
+            .on(station.companyId.eq(company.id),
+                company.deletedAt.isNull(),
+                station.deletedAt.isNull())
+            .where(station.id.eq(id))
+            .fetchOne();
+
+        return Optional.ofNullable(stationDetail);
     }
 
     private Predicate toPredicate(SearchStationSummaryCondition condition) {

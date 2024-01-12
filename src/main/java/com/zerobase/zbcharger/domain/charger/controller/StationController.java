@@ -1,6 +1,7 @@
 package com.zerobase.zbcharger.domain.charger.controller;
 
 import com.zerobase.zbcharger.configuration.security.annotation.RoleAdmin;
+import com.zerobase.zbcharger.domain.charger.dto.StationDetail;
 import com.zerobase.zbcharger.domain.charger.dto.admin.AddStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.SearchStationRequest;
 import com.zerobase.zbcharger.domain.charger.dto.admin.StationResponse;
@@ -71,5 +72,10 @@ public class StationController {
     public Slice<StationSummary> searchStationSummaryList(Pageable pageable,
         SearchStationSummaryCondition condition) {
         return stationService.searchStationSummaryList(pageable, condition);
+    }
+
+    @GetMapping("{id}")
+    public StationDetail getStationDetail(@PathVariable String id) {
+        return stationService.getStationDetail(id);
     }
 }
