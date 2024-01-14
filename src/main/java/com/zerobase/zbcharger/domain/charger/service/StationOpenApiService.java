@@ -42,7 +42,7 @@ public class StationOpenApiService {
     private final ChargerRepository chargerRepository;
 
     @Transactional
-//    @Scheduled(cron = "0/5 * * * * *")
+    @Scheduled(cron = "0 0 2 * * *")
     public void syncChargerInformationFromDataGoKrApi() {
         long start = System.currentTimeMillis();
         log.info("syncChargerInformationFromDataGoKrApi schedule started");
@@ -58,7 +58,7 @@ public class StationOpenApiService {
     }
 
     @Transactional
-//    @Scheduled(cron = "0/5 * * * * *")
+    @Scheduled(cron = "0 5 * * * *")
     public void syncChargerStatFromDataGoKrApi() {
         long start = System.currentTimeMillis();
         log.info("syncChargerStatFromDataGoKrApi schedule started");
@@ -196,7 +196,6 @@ public class StationOpenApiService {
     }
 
     private void updateCharger(List<ChargerStatus> chargerStatuses) {
-chargerRepository.bulkUpdateChargerStatus(chargerStatuses);
-
+        chargerRepository.bulkUpdateChargerStatus(chargerStatuses);
     }
 }

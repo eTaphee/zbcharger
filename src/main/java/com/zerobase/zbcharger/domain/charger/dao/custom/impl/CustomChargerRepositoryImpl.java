@@ -10,6 +10,8 @@ import com.zerobase.zbcharger.domain.charger.dto.ChargerSummary;
 import com.zerobase.zbcharger.domain.charger.dto.SearchChargerSummaryCondition;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -43,6 +45,8 @@ public class CustomChargerRepositoryImpl implements CustomChargerRepository {
 
     @Override
     public void bulkUpdateChargerStatus(List<ChargerStatus> chargerStatuses) {
+        LocalDateTime now = LocalDateTime.now();
+
         chargerStatuses.forEach(chargerStatus -> {
             String chargerId = chargerStatus.stationId() + chargerStatus.chargerId();
             queryFactory
@@ -52,6 +56,7 @@ public class CustomChargerRepositoryImpl implements CustomChargerRepository {
                 .set(charger.lastChargeStartedAt, chargerStatus.lastChargeStartedAt())
                 .set(charger.lastChargeFinishedAt, chargerStatus.lastChargeFinishedAt())
                 .set(charger.nowChargeStartedAt, chargerStatus.nowChargeStartedAt())
+                .set(charger.updatedAt, now)
                 .where(charger.id.eq(chargerId))
                 .execute();
         });
