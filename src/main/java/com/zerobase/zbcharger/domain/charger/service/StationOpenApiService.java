@@ -6,6 +6,8 @@ import com.zerobase.zbcharger.domain.charger.dao.CompanyRepository;
 import com.zerobase.zbcharger.domain.charger.dao.StationRepository;
 import com.zerobase.zbcharger.domain.charger.dto.ChargerInfo;
 import com.zerobase.zbcharger.domain.charger.dto.ChargerInfoResponse;
+import com.zerobase.zbcharger.domain.charger.dto.ChargerStatus;
+import com.zerobase.zbcharger.domain.charger.dto.ChargerStatusResponse;
 import com.zerobase.zbcharger.domain.charger.entity.Charger;
 import com.zerobase.zbcharger.domain.charger.entity.Company;
 import com.zerobase.zbcharger.domain.charger.entity.Station;
@@ -40,7 +42,7 @@ public class StationOpenApiService {
     private final ChargerRepository chargerRepository;
 
     @Transactional
-    @Scheduled(cron = "0/5 * * * * *")
+//    @Scheduled(cron = "0/5 * * * * *")
     public void syncChargerInformationFromDataGoKrApi() {
         long start = System.currentTimeMillis();
         log.info("syncChargerInformationFromDataGoKrApi schedule started");
@@ -53,6 +55,19 @@ public class StationOpenApiService {
 
         long end = System.currentTimeMillis();
         log.info("syncChargerInformationFromDataGoKrApi schedule finished - {} ms", end - start);
+    }
+
+    @Transactional
+//    @Scheduled(cron = "0/5 * * * * *")
+    public void syncChargerStatFromDataGoKrApi() {
+        long start = System.currentTimeMillis();
+        log.info("syncChargerStatFromDataGoKrApi schedule started");
+
+        List<ChargerStatus> chargerStatuses = getChargerStatues();
+        updateCharger(chargerStatuses);
+
+        long end = System.currentTimeMillis();
+        log.info("syncChargerStatFromDataGoKrApi schedule finished - {} ms", end - start);
     }
 
     /**
@@ -84,7 +99,7 @@ public class StationOpenApiService {
             } catch (Exception e) {
                 log.error("exception is occurred. {}, pageNo={}", e, pageNo - 1);
             }
-        } while (totalCount <= chargerInfos.size());
+        } while (totalCount >= chargerInfos.size());
 
         log.info("total chargerInfo={}", chargerInfos.size());
 
@@ -147,5 +162,41 @@ public class StationOpenApiService {
         chargerRepository.saveAll(chargerList);
 
         log.info("charger count={}", chargerList.size());
+    }
+
+    private List<ChargerStatus> getChargerStatues() {
+        List<ChargerStatus> chargerStatuses = new ArrayList<>();
+        int pageNo = 1;
+        int totalCount = -1;
+
+        do {
+            try {
+                ChargerStatusResponse response = dataGoKrApi
+                    .getChargerStatus(serviceKey, pageNo++, MAX_NUM_OF_ROWS);
+
+                totalCount = (totalCount == -1) ? response.getTotalCount() : totalCount;
+
+                if (response.getItems().isEmpty()) {
+                    break;
+                }
+
+                chargerStatuses.addAll(response.getItems());
+
+                log.info("get chargerStatus page={}, count={}",
+                    response.getPageNo(),
+                    response.getItems().size());
+            } catch (Exception e) {
+                log.error("exception is occurred. {}, pageNo={}", e, pageNo - 1);
+            }
+        } while (totalCount >= chargerStatuses.size());
+
+        log.info("total chargerStatus={}", chargerStatuses.size());
+
+        return chargerStatuses;
+    }
+
+    private void updateCharger(List<ChargerStatus> chargerStatuses) {
+chargerRepository.bulkUpdateChargerStatus(chargerStatuses);
+
     }
 }
